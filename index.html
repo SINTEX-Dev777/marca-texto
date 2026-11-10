@@ -1,0 +1,2289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marca-texto</title>
+<meta name="theme-color" content="#EEF1F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F141B" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF1F5; --sheet:#FFFFFF; --ink:#172338; --ink-2:#4E5A6E; --rule:#D3D9E2;
+  --marca:#F7DF45; --marca-ink:#172338;
+  --ok:#17784F; --ok-bg:#E2F2E9; --erro:#B23A25; --erro-bg:#FBE8E3; --dica-bg:#FFF7D1;
+  --fita:#172338; --fita-ink:#FFFFFF; --foco:#2B63D9; --btn:#172338; --btn-ink:#FFFFFF;
+  --serif:"Literata", Georgia, "Times New Roman", serif;
+  --sans:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F141B; --sheet:#18202B; --ink:#E6EAF0; --ink-2:#9DA8B8; --rule:#2B3545;
+    --marca:#E9CF3D; --marca-ink:#10151C;
+    --ok:#52C892; --ok-bg:#153026; --erro:#F2846F; --erro-bg:#3A201B; --dica-bg:#2E2A14;
+    --fita:#E6EAF0; --fita-ink:#10151C; --foco:#86AAFF; --btn:#E6EAF0; --btn-ink:#10151C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F141B; --sheet:#18202B; --ink:#E6EAF0; --ink-2:#9DA8B8; --rule:#2B3545;
+  --marca:#E9CF3D; --marca-ink:#10151C;
+  --ok:#52C892; --ok-bg:#153026; --erro:#F2846F; --erro-bg:#3A201B; --dica-bg:#2E2A14;
+  --fita:#E6EAF0; --fita-ink:#10151C; --foco:#86AAFF; --btn:#E6EAF0; --btn-ink:#10151C;
+  color-scheme: dark;
+}
+html{ scroll-padding-top: env(safe-area-inset-top, 0px); }
+*,*::before,*::after{ box-sizing: border-box; }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:1.0625rem; line-height:1.55; -webkit-text-size-adjust:100%; }
+a{ color:inherit; text-underline-offset:.18em; }
+svg{ width:1.25rem; height:1.25rem; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+:focus-visible{ outline:3px solid var(--foco); outline-offset:2px; border-radius:.3rem; }
+p{ margin:0 0 .75rem; }
+h1,h2{ font-family:var(--serif); font-weight:600; line-height:1.2; margin:0; }
+
+.wrap{ max-width:40rem; margin:0 auto; padding:.5rem 1.125rem 7rem; }
+
+/* topo */
+.topo{ display:flex; align-items:center; justify-content:space-between; padding:.75rem 0 1.25rem; }
+.logo{ font-family:var(--serif); font-weight:700; font-size:1.3rem; text-decoration:none; letter-spacing:-.01em; }
+.ajustes-link{ display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; color:var(--ink-2); }
+.ajustes-link:hover{ color:var(--ink); }
+
+/* o marca-texto: o único gesto ousado */
+.marca{
+  color:var(--marca-ink);
+  background-image:linear-gradient(100deg, transparent .1em, var(--marca) .28em, var(--marca) calc(100% - .32em), transparent calc(100% - .08em));
+  background-repeat:no-repeat; background-size:100% 86%; background-position:0 62%;
+  padding:0 .28em; margin:0 -.1em;
+  -webkit-box-decoration-break:clone; box-decoration-break:clone;
+  border-radius:.25em .55em .3em .6em;
+}
+
+/* fita de página (marcador de livro) */
+.fita{
+  display:inline-flex; align-items:center; vertical-align:.1em;
+  font:700 .78rem/1 var(--sans); letter-spacing:.01em;
+  background:var(--fita); color:var(--fita-ink);
+  padding:.36em 1em .36em .55em; white-space:nowrap;
+  clip-path:polygon(0 0,100% 0,calc(100% - .5em) 50%,100% 100%,0 100%);
+}
+
+/* botões */
+.btn,.btn-sec{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  min-height:48px; padding:.65rem 1.15rem; border-radius:.6rem;
+  font:700 1rem/1.2 var(--sans); text-decoration:none; cursor:pointer;
+}
+.btn{ background:var(--btn); color:var(--btn-ink); border:0; }
+.btn-sec{ background:transparent; color:var(--ink); border:1.5px solid var(--ink); }
+.btn[disabled],.btn-sec[disabled]{ opacity:.45; cursor:not-allowed; }
+.btn.perigo{ background:var(--erro); color:#fff; }
+.link{ background:none; border:0; padding:.5rem; font:700 1rem var(--sans); color:var(--ink); text-decoration:underline; cursor:pointer; min-height:44px; }
+
+/* blocos */
+.folha{ background:var(--sheet); border:1px solid var(--rule); border-radius:.9rem; padding:1.1rem 1.1rem 1.15rem; margin:0 0 1.25rem; }
+.lead{ font-size:1.0625rem; color:var(--ink-2); }
+.nota{ font-size:.92rem; color:var(--ink-2); }
+.sec{ font-size:1.15rem; margin:2rem 0 .75rem; }
+.tit-pag{ font-size:1.75rem; margin:0 0 .5rem; }
+.rot{ font-family:var(--sans); font-size:.92rem; font-weight:700; color:var(--ink-2); margin:0 0 .35rem; }
+.aviso{ border-radius:.6rem; padding:.7rem .85rem; margin:.75rem 0; font-size:.98rem; }
+.aviso p{ margin:0; }
+.aviso.erro{ background:var(--erro-bg); color:var(--ink); border-left:4px solid var(--erro); }
+.aviso.dica{ background:var(--dica-bg); border-left:4px solid var(--marca); }
+.linha{ display:flex; gap:.6rem; flex-wrap:wrap; }
+
+/* entrada */
+.entrada h1{ font-size:2rem; margin:.5rem 0 .75rem; }
+.soltar{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:.35rem; padding:2rem 1rem; margin:1.25rem 0 1.5rem; border:2px dashed var(--ink-2); border-radius:1rem; background:var(--sheet); cursor:pointer; }
+.soltar input{ position:absolute; width:1px; height:1px; opacity:0; }
+.soltar:focus-within{ outline:3px solid var(--foco); outline-offset:3px; }
+.soltar-tit{ font:600 1.35rem var(--serif); }
+.soltar-tit::after{ content:""; display:block; height:.35em; margin-top:-.15em; background:var(--marca); border-radius:.3em .6em .3em .7em; opacity:.85; }
+.soltar-sub{ font-size:.92rem; color:var(--ink-2); max-width:22rem; }
+.como{ padding-left:1.4rem; margin:0; }
+.como li{ margin:0 0 .6rem; padding-left:.2rem; }
+.barra{ height:.55rem; background:var(--rule); border-radius:1rem; overflow:hidden; margin:.5rem 0 .75rem; }
+.barra span{ display:block; height:100%; background:var(--marca); border-radius:1rem; transition:width .2s; }
+
+/* hoje */
+.abre{ margin:.25rem 0 1.5rem; }
+.abre h1{ font-size:clamp(1.85rem, 7vw, 2.4rem); letter-spacing:-.015em; }
+.abre-sub{ color:var(--ink-2); margin-top:.45rem; }
+.hoje-n{ font-weight:700; color:var(--ink-2); margin:0; }
+.hoje-tit{ font:600 1.45rem/1.25 var(--serif); margin:.1rem 0 .35rem; }
+.hoje-meta{ display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; color:var(--ink-2); font-size:.95rem; margin-bottom:1rem; }
+.segs{ display:inline-flex; gap:3px; }
+.segs i{ width:1.15rem; height:.4rem; border-radius:.2rem; background:var(--rule); }
+.segs i.on{ background:var(--marca); box-shadow:inset 0 0 0 1px rgba(0,0,0,.08); }
+.atraso{ margin:-.25rem 0 1.25rem; font-size:.98rem; }
+.avs{ list-style:none; margin:0; padding:0; border-top:1px solid var(--rule); }
+.av a{ display:grid; gap:.1rem; padding:.85rem .1rem; border-bottom:1px solid var(--rule); text-decoration:none; }
+.av-nome{ font-weight:700; }
+.av-desc{ color:var(--ink-2); font-size:.95rem; }
+.av-st{ font-size:.92rem; }
+.plano summary{ cursor:pointer; font-weight:700; padding:.6rem 0; min-height:44px; }
+.plano-l{ list-style:none; margin:0; padding:0; }
+.plano-l li{ display:grid; grid-template-columns:7.5rem 1fr auto; gap:.6rem; align-items:baseline; padding:.55rem 0; border-bottom:1px solid var(--rule); font-size:.95rem; }
+.plano-d{ color:var(--ink-2); font-variant-numeric:tabular-nums; }
+.plano-l li.feito a{ color:var(--ink-2); }
+.plano-ok{ color:var(--ok); }
+
+/* temas */
+.temas{ list-style:none; margin:0; padding:0; }
+.tema-l{ display:flex; gap:.9rem; padding:.9rem .1rem; border-bottom:1px solid var(--rule); text-decoration:none; }
+.tema-n{ font:600 1.5rem/1 var(--serif); width:1.8rem; text-align:right; color:var(--ink-2); padding-top:.15rem; }
+.tema-l.feito .tema-n{ color:var(--ok); }
+.tema-c{ display:grid; gap:.15rem; }
+.tema-t{ font:600 1.1rem/1.3 var(--serif); }
+.tema-m{ font-size:.9rem; color:var(--ink-2); }
+.tema-s{ font-size:.9rem; display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
+
+/* tema */
+.voltar{ display:inline-flex; align-items:center; gap:.2rem; font-weight:700; text-decoration:none; color:var(--ink-2); min-height:44px; margin:-.5rem 0 .5rem -.25rem; }
+.tema-cab h1{ font-size:clamp(1.7rem, 6.5vw, 2.2rem); margin:.15rem 0 .5rem; }
+.tema-rot{ font-weight:700; color:var(--ink-2); margin:0; }
+.tema-info{ color:var(--ink-2); }
+.metas{ margin:0 0 1.25rem; }
+.metas summary{ cursor:pointer; font-weight:700; padding:.6rem 0; }
+.metas ul{ margin:.25rem 0 0; padding-left:1.2rem; color:var(--ink-2); }
+.etapas{ list-style:none; margin:0; padding:0; }
+.etapa{ border-top:1px solid var(--rule); }
+.etapa:last-child{ border-bottom:1px solid var(--rule); }
+.etapa summary{ display:flex; align-items:center; gap:.8rem; padding:1rem 0; cursor:pointer; list-style:none; min-height:56px; }
+.etapa summary::-webkit-details-marker{ display:none; }
+.etapa summary::after{ content:""; margin-left:auto; width:.55rem; height:.55rem; border-right:2px solid var(--ink-2); border-bottom:2px solid var(--ink-2); transform:rotate(45deg) translateY(-.15rem); }
+.etapa details[open] summary::after{ transform:rotate(-135deg) translateY(-.1rem); }
+.etapa-n{ display:inline-flex; align-items:center; justify-content:center; width:2rem; height:2rem; border-radius:50%; border:1.5px solid var(--ink); font:700 .95rem var(--sans); flex:none; }
+.etapa.feita .etapa-n{ background:var(--ok); border-color:var(--ok); color:var(--sheet); }
+.etapa.feita .etapa-n svg{ width:1rem; height:1rem; stroke-width:2.6; }
+.etapa-nome{ font:600 1.15rem/1.3 var(--serif); }
+.etapa.feita .etapa-nome{ color:var(--ink-2); }
+.etapa-corpo{ padding:0 0 1.5rem; }
+.etapa-corpo > .btn, .etapa-corpo > .btn-sec{ margin-top:.5rem; }
+
+.pistas{ list-style:none; margin:.75rem 0 1.25rem; padding:0; display:grid; gap:.75rem; }
+.pista{ background:var(--sheet); border:1px solid var(--rule); border-radius:.75rem; padding:.9rem .95rem; }
+.pista-cab{ display:flex; justify-content:space-between; align-items:flex-start; gap:.75rem; margin-bottom:.45rem; }
+.pista-cab .marca{ font:600 1.05rem/1.45 var(--serif); }
+.pista-cab .fita{ margin-right:-.95rem; margin-top:.1rem; }
+.pista-q{ margin:0 0 .6rem; }
+.pista .btn-sec{ min-height:42px; font-size:.95rem; padding:.45rem .9rem; }
+.pista-r{ border-top:1px dashed var(--rule); padding-top:.6rem; font-size:.98rem; }
+.pista-r p:last-child{ margin:0; }
+.pegadinha{ color:var(--ink-2); }
+.pista.achada{ border-color:var(--ok); }
+.provaveis ul{ list-style:none; padding:0; margin:0 0 1rem; display:grid; gap:.45rem; }
+.provaveis li{ display:flex; gap:.4rem; flex-wrap:wrap; align-items:center; }
+.carregando{ display:flex; align-items:center; gap:.7rem; flex-wrap:wrap; padding:.75rem 0; color:var(--ink-2); }
+.carregando-g{ text-align:left; }
+.pulso{ width:.8rem; height:.8rem; border-radius:50%; background:var(--marca); animation:pulso 1.2s ease-in-out infinite; }
+@keyframes pulso{ 0%,100%{ transform:scale(.7); opacity:.5 } 50%{ transform:scale(1.15); opacity:1 } }
+@media (prefers-reduced-motion: reduce){ .pulso{ animation:none; } .barra span{ transition:none; } }
+
+/* questões */
+.q{ background:var(--sheet); border:1px solid var(--rule); border-radius:.9rem; padding:1rem 1rem 1.1rem; margin:0 0 1rem; }
+.q-rot{ font-size:.88rem; font-weight:700; color:var(--ink-2); margin:0 0 .5rem; }
+.q-txt p{ font-family:var(--serif); font-size:1.02rem; line-height:1.65; }
+.afirm{ list-style:none; padding:0; margin:0 0 .75rem; display:grid; gap:.5rem; }
+.afirm li{ display:grid; grid-template-columns:2.1rem 1fr; gap:.25rem; font-family:var(--serif); line-height:1.6; }
+.afirm b{ font-family:var(--sans); }
+.afirm-vf{ display:block; font-family:var(--sans); font-size:.9rem; color:var(--ink-2); margin-top:.2rem; }
+.q-cmd{ font-weight:700; margin:.25rem 0 .8rem; }
+.alts-lista{ list-style:none; padding:0; margin:0; display:grid; gap:.4rem; color:var(--ink-2); font-size:.97rem; }
+.alts{ display:grid; gap:.5rem; }
+.alt{ display:flex; gap:.7rem; align-items:flex-start; width:100%; text-align:left; background:var(--sheet); color:var(--ink); border:1.5px solid var(--rule); border-radius:.6rem; padding:.7rem .75rem; font:inherit; font-size:.99rem; line-height:1.45; cursor:pointer; }
+.alt:hover:not([disabled]){ border-color:var(--ink-2); }
+.alt-l{ display:inline-flex; align-items:center; justify-content:center; width:1.75rem; height:1.75rem; border-radius:50%; border:1.5px solid var(--ink-2); font-weight:700; flex:none; }
+.alt-t{ padding-top:.12rem; }
+.alt-tag{ display:block; font-size:.82rem; font-weight:700; margin-top:.25rem; }
+.alt.sel{ border-color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
+.alt.sel .alt-l{ background:var(--ink); color:var(--sheet); border-color:var(--ink); }
+.alt[disabled]{ cursor:default; }
+.alt.riscada{ border-style:dashed; border-color:var(--erro); }
+.alt.riscada .alt-t{ color:var(--ink-2); }
+.alt.riscada .alt-t{ text-decoration:line-through; text-decoration-color:var(--erro); }
+.alt.riscada .alt-tag{ text-decoration:none; color:var(--erro); display:inline-block; }
+.alt.certa{ border-color:var(--ok); background:var(--ok-bg); opacity:1; }
+.alt.certa .alt-l{ background:var(--ok); border-color:var(--ok); color:var(--sheet); }
+.alt.certa .alt-tag{ color:var(--ok); }
+.q-acoes{ margin-top:.9rem; }
+.explica{ margin-top:.9rem; border-radius:.6rem; padding:.8rem .9rem; font-size:.98rem; }
+.explica.ok{ background:var(--ok-bg); }
+.explica.nao{ background:var(--erro-bg); }
+.explica p:last-child{ margin:0; }
+.explica-tit{ font-weight:700; display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
+.explica-errada{ font-size:.95rem; }
+.resumo-acertos{ font-size:1.05rem; }
+
+/* simulados */
+.sims{ list-style:none; margin:1rem 0 0; padding:0; }
+.sim-c h2{ font-size:1.3rem; margin-bottom:.3rem; }
+.sim-desc{ color:var(--ink-2); }
+.sim-cab{ margin-bottom:1rem; }
+.sim-pos{ color:var(--ink-2); font-weight:700; margin:.2rem 0 .6rem; }
+.pontos{ display:flex; gap:.35rem; flex-wrap:wrap; }
+.ponto{ width:1.7rem; height:1.7rem; border-radius:.35rem; border:1.5px solid var(--ink-2); background:transparent; cursor:pointer; padding:0; }
+.ponto.on{ background:var(--marca); border-color:var(--marca); }
+.ponto.agora{ outline:2px solid var(--ink); outline-offset:2px; }
+.sim-nav{ display:flex; gap:.6rem; justify-content:space-between; margin:1rem 0; }
+.sim-nav .btn,.sim-nav .btn-sec{ flex:1; }
+.revisar{ margin-bottom:1rem; }
+.rev{ list-style:none; padding:0; margin:0; }
+.rev > li{ border-top:1px solid var(--rule); }
+.rev summary{ cursor:pointer; padding:.8rem 0; min-height:48px; display:flex; align-items:center; gap:.6rem; font-weight:700; }
+.rev-st{ font-size:.82rem; padding:.2rem .55rem; border-radius:1rem; }
+.rev-st.ok{ background:var(--ok-bg); color:var(--ok); }
+.rev-st.nao{ background:var(--erro-bg); color:var(--erro); }
+
+/* ajustes */
+.ajs h2{ font-size:1.15rem; margin-bottom:.5rem; }
+.ajs label{ display:block; font-weight:700; margin:.25rem 0 .35rem; }
+.ajs input[type=date]{ font:inherit; color:var(--ink); background:var(--paper); border:1.5px solid var(--rule); border-radius:.5rem; padding:.55rem .7rem; min-height:48px; margin-bottom:.9rem; width:100%; max-width:16rem; }
+
+.ajs input[type=password]{ font:inherit; color:var(--ink); background:var(--paper); border:1.5px solid var(--rule); border-radius:.5rem; padding:.55rem .7rem; min-height:48px; margin-bottom:.75rem; width:100%; }
+.passos{ padding-left:1.3rem; margin:0 0 1rem; }
+.passos li{ margin-bottom:.45rem; }
+.sync-ind{ display:inline-block; font-size:.85rem; font-weight:700; color:var(--ok); text-decoration:none; margin-left:.25rem; }
+.sync-ind::before{ content:""; display:inline-block; width:.5rem; height:.5rem; border-radius:50%; background:currentColor; margin-right:.35rem; vertical-align:.08em; }
+.sync-ind.erro{ color:var(--erro); }
+/* navegação inferior */
+.nav{ position:fixed; left:0; right:0; bottom:0; z-index:20; background:var(--sheet); border-top:1px solid var(--rule); padding-bottom:env(safe-area-inset-bottom, 0px); }
+.nav ul{ display:flex; max-width:40rem; margin:0 auto; padding:0; list-style:none; }
+.nav li{ flex:1; }
+.nav a{ display:flex; flex-direction:column; align-items:center; gap:.15rem; padding:.55rem 0 .5rem; min-height:56px; text-decoration:none; font-size:.8rem; font-weight:700; color:var(--ink-2); }
+.nav a svg{ width:1.45rem; height:1.45rem; }
+.nav a[aria-current="page"]{ color:var(--ink); }
+.nav a[aria-current="page"] span{ background-image:linear-gradient(var(--marca), var(--marca)); background-size:100% .45em; background-position:0 88%; background-repeat:no-repeat; padding:0 .2em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topo">
+    <a href="#hoje" class="logo"><span class="marca">Marca-texto</span></a>
+    <a href="#ajustes" class="ajustes-link" aria-label="Ajustes"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>
+  </header>
+  <main id="main"><p class="nota">Carregando…</p></main>
+</div>
+<nav class="nav" aria-label="Principal">
+  <ul>
+    <li><a href="#hoje" data-aba="hoje"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8.5 14.5l2 2 4-4"/></svg><span>Hoje</span></a></li>
+    <li><a href="#temas" data-aba="temas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c3-1.3 6-1.3 9 .8 3-2.1 6-2.1 9-.8v13c-3-1.3-6-1.3-9 .8-3-2.1-6-2.1-9-.8z"/><path d="M12 6.3v13"/></svg><span>Temas</span></a></li>
+    <li><a href="#simulados" data-aba="sim"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 10h7M8.5 14h4.5"/><path d="M14 17.2l1.4 1.4 2.6-2.7"/></svg><span>Simulados</span></a></li>
+  </ul>
+</nav>
+<script>
+/* ===== Parser do material (compartilhado com o teste em Node) ===== */
+const ROMAN_RE = /^(I|II|III|IV|V|VI|VII|VIII)\s?[-–—)]\s+/;
+const ALT_RE = /^([a-e])\)\s*(?:[a-e]\)\s*)?/;
+
+function compact(t){ return t.replace(/\s+/g,''); }
+
+function joinLines(lines){
+  let out = '';
+  for (let i=0;i<lines.length;i++){
+    let l = lines[i].trim();
+    if (!l) continue;
+    if (!out) { out = l; continue; }
+    if (/[a-zà-ú]-$/i.test(out) && /^[a-zà-ú]/.test(l)) { out = out.slice(0,-1) + l; }
+    else if (/-$/.test(out) && /^-/.test(l)) { out = out + l.slice(1); }
+    else out += ' ' + l;
+  }
+  return out.replace(/\s+/g,' ').trim();
+}
+
+function isNoiseLine(l){
+  const s = l.trim();
+  if (!s) return true;
+  if (/^\d{1,3}$/.test(s)) return true;
+  if (/^(\S\s){3,}\S/.test(s) && /^[A-ZÀ-Ú0-9\s]+$/.test(s)) return true;
+  if (/^TEMA DE APRENDIZAGEM \d+$/.test(s)) return true;
+  if (/^UNIASSELVI$/.test(s)) return true;
+  return false;
+}
+
+function cleanPage(t){
+  return t.split('\n').filter(l => !isNoiseLine(l)).join('\n')
+    .replace(/(E M F O C O|UNIASSELVI)/g,'').trim();
+}
+
+function parseQuestionBlock(num, text){
+  const lines = text.split('\n').map(s=>s.trim()).filter(Boolean);
+  const stem=[], afirm=[], cmd=[], alts=[];
+  let mode='stem';
+  for (const l of lines){
+    const ma = l.match(ALT_RE);
+    const mr = l.match(ROMAN_RE);
+    if (ma && (mode!=='stem' || alts.length===0) && (mode==='alt' || mode==='cmd' || mode==='stem' || mode==='afirm')) {
+      if (ma[1]==='a' || mode==='alt') { mode='alt'; alts.push({l:ma[1], lines:[l.slice(ma[0].length)]}); continue; }
+    }
+    if (mr && mode!=='alt'){ mode='afirm'; afirm.push({n:mr[1], lines:[l.slice(mr[0].length)]}); continue; }
+    if (mode==='stem') stem.push(l);
+    else if (mode==='afirm'){
+      if (/^(É correto|Assinale|Agora,? assinale|A sequência|Está correto|Estão corretas)/i.test(l)) { mode='cmd'; cmd.push(l); }
+      else afirm[afirm.length-1].lines.push(l);
+    }
+    else if (mode==='cmd') cmd.push(l);
+    else if (mode==='alt') alts[alts.length-1].lines.push(l);
+  }
+  // separa o comando final (a frase que pede a resposta) do contexto
+  let enunciado = joinLines(stem);
+  let comando = '';
+  const CMD = /((?:Com base|Sobre|Analise|Assinale|Considerando|Diante|A partir|De acordo|Nesse contexto|Em relação|Qual|Quais|Marque|Identifique)[^:?]*[:?])\s*$/;
+  let m = enunciado.match(CMD);
+  if (!m){ const i = enunciado.lastIndexOf('. ', enunciado.length - 2); if (i > 0 && /[:?]$/.test(enunciado)) { const t = enunciado.slice(i+2); m = [t, t]; } }
+  if (m && m[1].length < enunciado.length){ comando = m[1].trim(); enunciado = enunciado.slice(0, enunciado.length - m[0].length).trim(); }
+  const comandoFinal = afirm.length ? (joinLines(cmd) || 'É correto o que se afirma em:') : comando;
+  const enunciadoFinal = afirm.length && comando ? enunciado + '\n' + comando : enunciado;
+  return {
+    id: 'livro-' + num, origem:'livro', numero:num,
+    enunciado: enunciadoFinal,
+    afirmativas: afirm.map(a => ({n:a.n, t:joinLines(a.lines)})),
+    comando: comandoFinal,
+    alternativas: alts.map(a => ({l:a.l, t:joinLines(a.lines)}))
+  };
+}
+
+function parseQuestions(text){
+  const t = text.replace(/AUTOATIVIDADE/g,'\n');
+  const lines = t.split('\n').filter(l => !isNoiseLine(l));
+  const blocks=[]; let cur=null;
+  for (const l of lines){
+    const m = l.trim().match(/^(\d{1,2})\.\s+(.*)$/);
+    if (m && (!cur || +m[1] === cur.num + 1)) { cur = {num:+m[1], lines:[m[2]]}; blocks.push(cur); continue; }
+    if (cur) cur.lines.push(l);
+  }
+  return blocks.map(b => parseQuestionBlock(b.num, b.lines.join('\n'))).filter(q => q.alternativas.length >= 2);
+}
+
+function buildStructure(pages, nomeArquivo){
+  const n = pages.length;
+  const C = pages.map(compact);
+  const temaStarts = [];
+  const unidadePages = [];
+  for (let i=0;i<n;i++){
+    if (/^UNIDADE\d+$/.test(C[i])) unidadePages.push({p:i+1, n:+C[i].match(/\d+/)[0]});
+    if (C[i].startsWith('MINHASMETAS')) {
+      temaStarts.push({p:i+1, n: temaStarts.length+1});
+    }
+  }
+  const temas = [];
+  if (temaStarts.length){
+    temaStarts.forEach((ts, k) => {
+      const next = k+1 < temaStarts.length ? temaStarts[k+1].p : n+1;
+      // fim: última página antes de REFERÊNCIAS
+      let fim = next - 1, ref = null;
+      for (let p = ts.p; p < next; p++) if (C[p-1].startsWith('REFERÊNCIAS') || C[p-1].startsWith('REFERENCIAS')) { ref = p; break; }
+      if (ref) fim = ref - 1;
+      // abre: título e metas
+      const first = pages[ts.p-1].replace(/^MINHAS METAS/, '');
+      const ls = first.split('\n').map(s=>s.trim()).filter(Boolean);
+      const tl=[], metas=[];
+      for (const l of ls){
+        if (isNoiseLine(l) || /^T\s?E\s?M\s?A/.test(l)) continue;
+        if (!metas.length && /^[^a-zà-ú]+$/.test(l)) tl.push(l); else metas.push(l);
+      }
+      // autoatividades
+      const qPages = [];
+      for (let p = ts.p; p <= fim; p++) if (C[p-1].includes('AUTOATIVIDADE')) qPages.push(p);
+      let questoes = [];
+      if (qPages.length){
+        questoes = parseQuestions(qPages.map(p => pages[p-1]).join('\n'));
+      }
+      // gabarito do livro (fica depois das referências)
+      let gabarito = {};
+      const gPages = [];
+      for (let p = ts.p; p < next; p++) if (C[p-1].includes('GABARITO') && /^\s*1\.\s*Alternativa/i.test(pages[p-1])) { gPages.push(p); if (p + 1 < next && /^\s*\d\.\s*Alternativa/i.test(pages[p]) ) gPages.push(p+1); }
+      if (gPages.length) gabarito = parseGabarito([...new Set(gPages)].map(p => pages[p-1]).join('\n'));
+      const unidade = (unidadePages.filter(u => u.p < ts.p).pop() || {n:1}).n;
+      const conteudoFim = qPages.length ? Math.min(...qPages) - 1 : fim;
+      temas.push({
+        n: ts.n, unidade,
+        titulo: tituloBonito(joinLines(tl)) || ('Tema ' + ts.n),
+        metas,
+        pIni: ts.p, pFim: conteudoFim, pQuestoes: qPages,
+        questoes, gabarito
+      });
+    });
+  } else {
+    // material genérico: partes de até 15 páginas
+    const tam = 15;
+    for (let i=0, k=1; i<n; i+=tam, k++){
+      temas.push({ n:k, unidade:1, titulo:'Páginas ' + (i+1) + ' a ' + Math.min(n, i+tam), metas:[], pIni:i+1, pFim:Math.min(n,i+tam), pQuestoes:[], questoes:[] });
+    }
+  }
+  return {
+    nome: nomeArquivo || 'Material',
+    totalPaginas: n,
+    formatoLivro: temaStarts.length > 0,
+    unidades: [...new Set(temas.map(t=>t.unidade))],
+    temas
+  };
+}
+
+function tituloBonito(s){
+  if (!s) return s;
+  const keep = new Set(['HTML5','CSS3','DOM','HTML','CSS','API','HTTP','URL','UX','UI','SEO','W3C','JSON']);
+  const minus = new Set(['de','da','do','das','dos','e','com','em','ao','a','o','para']);
+  return s.split(/\s+/).map((w,i) => {
+    const bare = w.replace(/[()]/g,'');
+    if (keep.has(bare)) return w;
+    if (bare === 'JAVASCRIPT') return w.replace('JAVASCRIPT', 'JavaScript');
+    const lw = w.toLowerCase();
+    if (i>0 && minus.has(lw)) return lw;
+    return lw.replace(/(^|[(\-])([a-zà-ú])/g, (m,a,b)=>a+b.toUpperCase());
+  }).join(' ');
+}
+
+function textoTema(pages, tema, maxChars){
+  let out = '';
+  for (let p = tema.pIni; p <= tema.pFim; p++){
+    const lines = cleanPage(pages[p-1]).split('\n');
+    out += '\n[pág ' + p + ']\n' + joinParas(lines);
+    if (maxChars && out.length > maxChars) break;
+  }
+  return out.slice(0, maxChars || out.length);
+}
+function joinParas(lines){
+  // junta linhas quebradas, mantendo quebras quando a linha anterior termina frase
+  const paras=[]; let cur=[];
+  for (const l of lines){
+    cur.push(l);
+    if (/[.:!?]$/.test(l.trim())) { paras.push(joinLines(cur)); cur=[]; }
+  }
+  if (cur.length) paras.push(joinLines(cur));
+  return paras.join('\n');
+}
+
+const STOP = new Set('sobre entre quando sendo assim também apenas sempre nunca outra outro outras outros possui possuem podem pode deve devem cada essa esse esta este essas esses estas estes isso isto aquela aquele mesmo mesma muito muitos muitas forma formas parte partes texto base seguir analise assinale alternativa correta afirmativas afirma correto utilizar utilizada utilizado usado usada usadas usados como para pela pelo pelas pelos onde ainda além durante desde porque então dentro principal principais diferentes diferente importante página páginas desenvolvimento web'.split(' '));
+function termos(s){
+  const tags = (s.match(/<[a-z0-9!]+/gi) || []).map(x=>x.toLowerCase());
+  const words = s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').match(/[a-z0-9][a-z0-9-]{4,}/g) || [];
+  return [...new Set([...tags, ...words.filter(w => !STOP.has(w))])];
+}
+function paginasProvaveis(pages, tema, q){
+  const txt = [q.enunciado, ...(q.afirmativas||[]).map(a=>a.t), ...(q.alternativas||[]).map(a=>a.t)].join(' ');
+  const ts = termos(txt);
+  const scores=[];
+  for (let p = tema.pIni + 1; p <= tema.pFim; p++){
+    const pt = pages[p-1].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    let s = 0;
+    for (const t of ts){ const c = pt.split(t).length - 1; if (c) s += 1 + Math.log(c); }
+    scores.push({p, s});
+  }
+  return scores.sort((a,b)=>b.s-a.s).slice(0,3).filter(x=>x.s>0).map(x=>x.p).sort((a,b)=>a-b);
+}
+
+
+
+function parseGabarito(text){
+  const t = text.replace(/GABARITO/g, '\n');
+  const lines = t.split('\n').filter(l => !isNoiseLine(l));
+  const joined = joinLines(lines);
+  const out = {};
+  const re = /(?:^|\s)(\d{1,2})\.\s*Alternativa\s+([A-Ea-e])\b\.?/g;
+  const marks = []; let m;
+  while ((m = re.exec(joined))) marks.push({ num:+m[1], letra:m[2].toLowerCase(), ini:m.index, fimCab:re.lastIndex });
+  marks.forEach((mk, i) => {
+    const corpo = joined.slice(mk.fimCab, i + 1 < marks.length ? marks[i+1].ini : joined.length).trim();
+    const partes = corpo.split(/(?=A (?:alternativa|afirmativa) [A-Ea-e]\b|A (?:alternativa|afirmativa) (?:I|II|III|IV|V)\b)/);
+    let explicacao = '';
+    const erradas = {}, afirmativas = {};
+    for (const p of partes){
+      const ma = p.match(/^A (?:alternativa|afirmativa) ([A-Ea-e]) está (?:incorreta|errada)[,.]?\s*(?:pois|porque)?\s*([\s\S]*)$/);
+      const mf = p.match(/^A afirmativa (I|II|III|IV|V) está (correta|incorreta)[,.]?\s*(?:pois|porque)?\s*([\s\S]*)$/);
+      if (ma){ erradas[ma[1].toLowerCase()] = cap1(ma[2].trim().replace(/^[,;:\s]+/, '')); }
+      else if (mf){ afirmativas[mf[1]] = (mf[2] === 'correta' ? 'Verdadeira: ' : 'Falsa: ') + mf[3].trim(); }
+      else explicacao += (explicacao ? ' ' : '') + p.trim();
+    }
+    out[mk.num] = { correta: mk.letra, explicacao, erradas, afirmativas, paginas: [], conceito: '', fonte: 'livro' };
+  });
+  return out;
+}
+function cap1(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+if (typeof module !== 'undefined') module.exports.parseGabarito = parseGabarito;
+
+const D = {};
+D[1] = {
+  pistas: [
+    { conceito:'Front-end, back-end e full stack', pagina:11,
+      pergunta:'O que cada área faz e quais tecnologias o livro cita para cada uma?',
+      resposta:'Front-end cuida do que o usuário vê e usa (layout, botões, menus, formulários) e exige sensibilidade visual e HTML, CSS e JavaScript. Back-end cuida dos bastidores (dados, regras de negócio, banco de dados, segurança) com linguagens como PHP, Python e Node.js. Full stack atua nas duas.',
+      pegadinha:'Dizer que o back-end usa só Java, que front-end é só design ou que o full stack não precisa dominar as duas áreas.' },
+    { conceito:'Origem da web e Web 1.0', pagina:12,
+      pergunta:'Quem propôs a web, o que surgiu em 1991 e como era a Web 1.0?',
+      resposta:'Tim Berners-Lee propôs a World Wide Web no fim dos anos 1980. Em 1991 saiu o primeiro site e o HTML. A Web 1.0 tinha só texto, conteúdo estático e comunicação de mão única.',
+      pegadinha:'Dizer que a Web 1.0 já tinha usuários participando e produzindo conteúdo.' },
+    { conceito:'JavaScript, CSS e Web 2.0', pagina:13,
+      pergunta:'Em que ano surgiram o JavaScript e o CSS, e o que cada um trouxe?',
+      resposta:'JavaScript (1995) fez as páginas reagirem às ações do usuário. CSS (1996) separou conteúdo e estilo. Na Web 2.0, os usuários passaram a interagir e produzir conteúdo em blogs, redes sociais e wikis.',
+      pegadinha:'Inverter a ordem e dizer que o JavaScript veio antes do HTML, ou que o CSS não teve importância para o design.' },
+    { conceito:'AJAX, HTML5 e CSS3', pagina:13,
+      pergunta:'O que o AJAX permitiu e o que o HTML5 e o CSS3 trouxeram?',
+      resposta:'O AJAX permitiu atualizar partes da página sem recarregá-la inteira. HTML5 e CSS3 trouxeram elementos semânticos, áudio e vídeo nativos e animações, reduzindo a necessidade de plugins.',
+      pegadinha:'Dizer que o HTML5 aumentou a dependência de plugins externos.' },
+    { conceito:'Estrutura e carregamento de um site', pagina:15,
+      pergunta:'Qual o papel de cada arquivo e qual é carregado primeiro?',
+      resposta:'HTML define estrutura e conteúdo, CSS a aparência e JavaScript a interatividade. É comum separar pastas css, js e img. O HTML carrega primeiro e, por ele, o navegador descobre os outros arquivos.',
+      pegadinha:'Trocar os papéis: dizer que o CSS dá interatividade ou que o JavaScript define a estrutura.' },
+    { conceito:'Site estático e site dinâmico', pagina:16,
+      pergunta:'Qual a diferença entre os dois e um exemplo de uso de cada?',
+      resposta:'Estático mostra o mesmo conteúdo para todos, com arquivos prontos (portfólio, página institucional). Dinâmico gera conteúdo diferente por usuário ou data, usa back-end (PHP, Node.js) e banco de dados (redes sociais, e-commerce).',
+      pegadinha:'Dizer que o site estático muda sozinho ou que o dinâmico dispensa back-end.' },
+    { conceito:'IP, DNS e cliente-servidor', pagina:17,
+      pergunta:'O que o DNS faz e quem é o cliente e quem é o servidor?',
+      resposta:'O IP é o endereço digital de cada dispositivo. O DNS traduz o nome do site para o IP. O navegador é o cliente que pede; o servidor recebe a requisição e devolve os arquivos. Apache e Nginx são servidores web (p. 18 e 19).',
+      pegadinha:'Dizer que o navegador é o servidor ou que o DNS guarda as páginas do site.' },
+    { conceito:'Métodos HTTP e HTTPS', pagina:20,
+      pergunta:'O que fazem GET, POST, PUT e DELETE, e o que o S do HTTPS acrescenta?',
+      resposta:'GET solicita dados, POST envia dados (formulário), PUT atualiza e DELETE remove. O HTTPS é a versão segura (secure) do HTTP: os dados trafegam criptografados.',
+      pegadinha:'Trocar as funções dos métodos, como dizer que GET envia o formulário ou que PUT remove dados.' },
+    { conceito:'Partes da URL e URL amigável', pagina:22,
+      pergunta:'Em https://www.exemplo.com/produtos?id=5, qual é cada parte?',
+      resposta:'https é o protocolo, www.exemplo.com o domínio, /produtos o caminho e ?id=5 os parâmetros. Também existem porta, fragmento (#secao) e subdomínio (blog.exemplo.com). URL amigável usa minúsculas, hífens e palavras-chave (p. 23).',
+      pegadinha:'Chamar o caminho de domínio ou o fragmento de parâmetro.' }
+  ],
+  livro: {
+    1: { paginas:[11], conceito:'áreas: front-end, back-end e full stack' },
+    2: { paginas:[11], conceito:'habilidades de cada área' },
+    3: { paginas:[12, 13], conceito:'história: HTML, JavaScript e CSS' }
+  },
+  treino: [
+    { contexto:'Uma loja virtual tem uma página que lista seus produtos e uma tela de cadastro na qual o cliente preenche nome, e-mail e senha. A equipe de desenvolvimento precisa escolher corretamente o método HTTP de cada ação.',
+      comando:'Com base nos métodos HTTP, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O método GET é o mais indicado para enviar os dados do formulário de cadastro ao servidor.', b:'O método POST é usado para enviar dados ao servidor, como ao preencher um formulário de cadastro.', c:'O método DELETE é usado para atualizar os dados de um produto já existente.', d:'O método PUT remove informações do servidor, como excluir um cliente.', e:'O HTTP define um único método, usado para todos os tipos de ação.' },
+      correta:'b', pagina:20, conceito:'métodos HTTP',
+      explicacao:'POST envia dados ao servidor, como no cadastro. GET solicita dados, PUT atualiza, DELETE remove, e o HTTP tem vários métodos, não um só.' },
+    { contexto:'Ao analisar o endereço https://blog.exemplo.com/produtos?id=5#avaliacoes, um estagiário tentou identificar cada componente da URL para entender como o navegador encontra o recurso solicitado.',
+      comando:'É correto o que se afirma em:',
+      afirmativas:['A parte blog é um subdomínio.', 'A parte /produtos é o protocolo da URL.', 'A parte ?id=5 são parâmetros que enviam informações adicionais na requisição.', 'A parte #avaliacoes é o domínio do site.'],
+      alternativas:{ a:'I e II, apenas.', b:'II e IV, apenas.', c:'III, apenas.', d:'I e III, apenas.', e:'I, III e IV, apenas.' },
+      correta:'d', pagina:22, conceito:'partes da URL',
+      explicacao:'I e III estão certas. /produtos é o caminho (o protocolo é https) e #avaliacoes é um fragmento, não o domínio.' },
+    { contexto:'Um fotógrafo quer um site simples para mostrar seu portfólio, que mudará poucas vezes por ano. Ao mesmo tempo, uma startup quer criar uma rede social em que cada usuário vê um feed diferente.',
+      comando:'Considerando a diferença entre sites estáticos e dinâmicos, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O site estático gera conteúdo diferente para cada usuário, por isso serve para a rede social.', b:'Sites dinâmicos dispensam linguagens de back-end e bancos de dados.', c:'Um site estático atualiza seu conteúdo sozinho de acordo com a data.', d:'Todo portfólio precisa obrigatoriamente de banco de dados para funcionar.', e:'O portfólio pode ser estático, pois mostra o mesmo conteúdo para todos, e a rede social precisa ser dinâmica, com back-end e banco de dados.' },
+      correta:'e', pagina:16, conceito:'site estático e dinâmico',
+      explicacao:'Estático exibe sempre o mesmo conteúdo, com arquivos prontos, ideal para portfólios. Dinâmico muda conforme o usuário e usa back-end e banco de dados, ideal para redes sociais.' },
+    { contexto:'Quando alguém digita www.exemplo.com no navegador, várias etapas acontecem antes de a página aparecer na tela. Entender essas etapas ajuda a diagnosticar erros de carregamento e lentidão.',
+      comando:'Sobre o funcionamento da internet, analise as afirmativas a seguir. É correto o que se afirma em:',
+      afirmativas:['O DNS traduz o nome do site para o endereço IP correspondente.', 'No modelo cliente-servidor, o navegador atua como servidor, guardando os arquivos do site.', 'Apache e Nginx são exemplos de servidores web que entregam as páginas solicitadas.'],
+      alternativas:{ a:'I e III, apenas.', b:'II, apenas.', c:'I e II, apenas.', d:'II e III, apenas.', e:'I, II e III.' },
+      correta:'a', pagina:17, conceito:'DNS e cliente-servidor',
+      explicacao:'I e III estão certas. A II erra porque o navegador é o cliente, que faz os pedidos; o servidor é quem recebe e responde.' },
+    { contexto:'Uma cooperativa de crédito vai lançar um site em que os associados acessam o saldo com login e senha. O gerente perguntou à equipe por que o endereço precisa começar com https.',
+      comando:'Assinale a alternativa que explica corretamente o HTTPS:', afirmativas:[],
+      alternativas:{ a:'O S de HTTPS significa server e indica que o site tem servidor próprio.', b:'O HTTPS só é necessário em sites que não pedem senha.', c:'O HTTPS é a versão segura do HTTP e garante que os dados trocados entre navegador e servidor estejam criptografados.', d:'Os navegadores modernos não diferenciam sites com HTTP e com HTTPS.', e:'Mecanismos de busca, como o Google, prejudicam sites que usam HTTPS.' },
+      correta:'c', pagina:20, conceito:'HTTP e HTTPS',
+      explicacao:'O S vem de secure: os dados vão criptografados, essencial para senhas e dados bancários. Navegadores alertam sites sem HTTPS e o Google favorece quem usa.' },
+    { contexto:'Com a popularização dos smartphones e o aumento das expectativas dos usuários, a web passou por várias mudanças tecnológicas que tornaram as aplicações mais rápidas e parecidas com softwares tradicionais.',
+      comando:'Sobre a evolução das tecnologias web, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O AJAX permitiu atualizar partes da página sem recarregá-la completamente, tornando as aplicações mais ágeis.', b:'A Web 1.0 era marcada por blogs, redes sociais e wikis.', c:'O CSS surgiu em 1991, junto com o primeiro site da história.', d:'O HTML5 aumentou a dependência de plugins externos para áudio e vídeo.', e:'O design responsivo surgiu para atender apenas computadores de mesa.' },
+      correta:'a', pagina:13, conceito:'AJAX e evolução da web',
+      explicacao:'O AJAX trouxe atualizações parciais de página. Blogs e redes sociais são da Web 2.0, o CSS é de 1996, o HTML5 reduziu plugins com áudio e vídeo nativos, e o design responsivo veio com os smartphones.' }
+  ]
+};
+
+D[2] = {
+  pistas: [
+    { conceito:'HTML é linguagem de marcação', pagina:32,
+      pergunta:'O que significa HTML e por que ele não é linguagem de programação?',
+      resposta:'HyperText Markup Language, linguagem de marcação de hipertexto. Define estrutura e conteúdo da página (o esqueleto). Não tem lógica de execução como se, então e enquanto: só tags que marcam o conteúdo.',
+      pegadinha:'Chamar o HTML de linguagem de programação ou dizer que ele define a aparência.' },
+    { conceito:'Estrutura básica do documento', pagina:33,
+      pergunta:'Qual a função do DOCTYPE, do html lang, do head e do body?',
+      resposta:'<!DOCTYPE html> declara HTML5, é obrigatório e vem no início. <html lang="pt-br"> é a raiz e indica o idioma. <head> guarda informações invisíveis (título da aba, UTF-8, links para CSS). <body> guarda tudo o que é visível.',
+      pegadinha:'Dizer que o head mostra o conteúdo visível ou que o DOCTYPE é opcional.' },
+    { conceito:'Semântica no HTML5', pagina:34,
+      pergunta:'Quais são as tags semânticas e quais vantagens elas trazem?',
+      resposta:'header, nav, main, section, article e footer dizem o que cada parte é. Melhoram a leitura por leitores de tela, a indexação pelo Google e a manutenção. Marque pelo significado, não pela aparência.',
+      pegadinha:'Dizer que tags semânticas servem para aplicar estilo ou que substituem CSS e JavaScript.' },
+    { conceito:'Títulos e tags de texto', pagina:34,
+      pergunta:'Para que servem h1 a h6, p, strong, em, br e hr?',
+      resposta:'h1 é o título principal; h2 a h6 são subtítulos em níveis. p é parágrafo, strong dá ênfase forte, em itálico, br quebra linha e hr linha horizontal (p. 35). A hierarquia dos títulos deve ser coerente.',
+      pegadinha:'Pular a hierarquia, como usar h2 antes do h1.' },
+    { conceito:'div, seções e listas', pagina:35,
+      pergunta:'Qual a diferença entre div e as tags semânticas, e entre ul e ol?',
+      resposta:'div é contêiner genérico, sem significado. section, article, header, footer e nav dão significado. ul é lista não ordenada (marcadores), ol é ordenada (números), e cada item é li.',
+      pegadinha:'Dizer que ul cria lista numerada ou que div tem significado semântico.' },
+    { conceito:'Imagens, links e mídias', pagina:36,
+      pergunta:'Quais atributos a img e o a precisam?',
+      resposta:'img usa src (caminho do arquivo) e alt (descrição para acessibilidade). a usa href (para onde o link leva). video e audio incorporam mídias.',
+      pegadinha:'Trocar src por href na imagem ou dizer que alt é só enfeite.' },
+    { conceito:'Formulários e tipos de input', pagina:38,
+      pergunta:'O que fazem action, method e label, e quais os tipos de input mais usados?',
+      resposta:'action define para onde os dados vão, method o tipo de requisição (post). label associa o texto ao campo. Tipos: text, email (valida e-mail), number, password (oculta), checkbox (várias), radio (uma só), submit (p. 39).',
+      pegadinha:'Confundir checkbox (marcação múltipla) com radio (escolha única).' },
+    { conceito:'Atributos e boas práticas de formulário', pagina:40,
+      pergunta:'Para que servem placeholder, required, value, name e id?',
+      resposta:'placeholder é sugestão dentro do campo, required obriga o preenchimento, value é valor padrão, name identifica o dado no envio, id é identificador único. select com option faz lista suspensa; textarea, texto longo. Placeholder não substitui label.',
+      pegadinha:'Dizer que o placeholder pode substituir o label.' },
+    { conceito:'Boas práticas e ligação com CSS e JS', pagina:42,
+      pergunta:'Onde se liga o CSS, onde se coloca o script e por que separar as funções?',
+      resposta:'Comentários com <!-- -->, indentação, class e id descritivos (p. 41). HTML só estrutura, CSS estilo, JS comportamento: evite style e onclick no HTML. CSS entra com <link> no head; JS com <script> no fim do body (p. 43).',
+      pegadinha:'Dizer que é boa prática colocar estilos e scripts direto nas tags.' }
+  ],
+  livro: {
+    1: { paginas:[33], conceito:'estrutura básica do documento HTML5' },
+    2: { paginas:[34], conceito:'semântica no HTML5' },
+    3: { paginas:[35], conceito:'div, section, article e listas' }
+  },
+  treino: [
+    { contexto:'Uma estudante criou sua primeira página e colocou o título da aba, a codificação UTF-8 e o link para o arquivo de estilos em uma parte do documento, e os textos e imagens em outra.',
+      comando:'Sobre a estrutura básica de um documento HTML5, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'A tag <body> guarda informações invisíveis, como o título da aba e a codificação de caracteres.', b:'A declaração <!DOCTYPE html> é opcional e pode ficar no fim do documento.', c:'A tag <head> contém informações invisíveis para o usuário, mas essenciais para o navegador, como título da aba e links para CSS.', d:'O atributo lang da tag <html> define a cor do texto da página.', e:'A tag <html> deve ficar dentro do <body>.' },
+      correta:'c', pagina:33, conceito:'head e body',
+      explicacao:'O head guarda informações invisíveis (título, UTF-8, links). O body guarda o conteúdo visível. O DOCTYPE é obrigatório e vem no início, lang indica o idioma e html é a raiz que envolve tudo.' },
+    { contexto:'Uma equipe está montando o formulário de inscrição de um curso on-line. É preciso coletar o nome, o e-mail, uma senha e a escolha de um único turno entre manhã, tarde e noite.',
+      comando:'Analise as afirmativas sobre os tipos de campo. É correto o que se afirma em:',
+      afirmativas:['O tipo email valida se o conteúdo digitado é um e-mail válido.', 'O tipo password oculta o texto digitado.', 'Para escolher um único turno entre várias opções, o tipo mais adequado é checkbox.', 'O tipo submit cria o botão de envio do formulário.'],
+      alternativas:{ a:'I e III, apenas.', b:'II e III, apenas.', c:'III e IV, apenas.', d:'I, II e III, apenas.', e:'I, II e IV, apenas.' },
+      correta:'e', pagina:39, conceito:'tipos de input',
+      explicacao:'I, II e IV estão certas. A III erra: checkbox é marcação múltipla; para escolha única entre opções usa-se radio.' },
+    { contexto:'Ao revisar o formulário de um colega, um desenvolvedor percebeu que os campos não tinham rótulos: o texto explicativo aparecia apenas dentro do campo e sumia quando o usuário começava a digitar.',
+      comando:'Com base nas boas práticas de formulários, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O placeholder deve ser usado apenas como dica, sem substituir o <label>, que precisa estar associado ao campo.', b:'O atributo required define o valor padrão do campo.', c:'O atributo name é dispensável, pois o navegador identifica os dados sozinho.', d:'Usar várias tags <br> é a forma recomendada de posicionar os campos.', e:'O atributo id pode se repetir em vários campos do mesmo documento.' },
+      correta:'a', pagina:40, conceito:'placeholder e label',
+      explicacao:'O placeholder é só sugestão; o label deve estar associado ao campo. required obriga o preenchimento (valor padrão é value), name identifica o dado, posicionamento se faz com CSS e id é único.' },
+    { contexto:'Um portal de notícias tem cabeçalho com logotipo, menu de navegação, a área principal com várias notícias independentes e um rodapé com contatos. O desenvolvedor quer marcar cada parte pelo seu significado.',
+      comando:'Assinale a alternativa que usa corretamente as tags semânticas:', afirmativas:[],
+      alternativas:{ a:'<footer> para o menu, <header> para o rodapé e <div> para cada notícia.', b:'<header> para o cabeçalho, <nav> para o menu, <main> para a área principal, <article> para cada notícia e <footer> para o rodapé.', c:'<section> para tudo, já que a tag aplica o estilo de cada parte automaticamente.', d:'<nav> para cada notícia e <article> para o menu de navegação.', e:'Apenas <div>, pois tags semânticas não ajudam leitores de tela nem buscadores.' },
+      correta:'b', pagina:34, conceito:'tags semânticas',
+      explicacao:'Cada tag indica o tipo de conteúdo: header, nav, main, article (conteúdo independente, como notícia) e footer. Semântica não aplica estilo e ajuda leitores de tela e buscadores.' },
+    { contexto:'Para deixar o site da lanchonete do bairro mais completo, um estudante vai inserir o logotipo, um link para o perfil da loja e um vídeo de apresentação.',
+      comando:'Sobre imagens, links e mídias no HTML, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'A tag <img> usa o atributo href para indicar o caminho do arquivo.', b:'O atributo alt serve apenas para decorar a imagem e pode ser ignorado.', c:'Vídeos só podem ser exibidos com plugins externos.', d:'A tag <img> usa src para o caminho do arquivo e alt para descrever a imagem para fins de acessibilidade.', e:'A tag <a> usa o atributo src para definir o destino do link.' },
+      correta:'d', pagina:36, conceito:'img, a, video',
+      explicacao:'img usa src e alt (acessibilidade); a usa href para o destino; video e audio incorporam mídias diretamente no navegador.' },
+    { contexto:'Para acelerar uma entrega, um desenvolvedor colocou style="color:red;" em vários parágrafos e onclick em diversos botões, direto no HTML. Na revisão de código, a líder técnica pediu mudanças.',
+      comando:'Com base na separação entre estrutura, estilo e comportamento, analise as afirmativas. É correto o que se afirma em:',
+      afirmativas:['O HTML deve conter somente a estrutura e o conteúdo da página.', 'O CSS é conectado ao HTML pela tag <link> dentro do <head>.', 'O JavaScript deve ser colocado obrigatoriamente dentro do <head>, antes do título.'],
+      alternativas:{ a:'I e II, apenas.', b:'I, apenas.', c:'II e III, apenas.', d:'III, apenas.', e:'I, II e III.' },
+      correta:'a', pagina:42, conceito:'separação HTML, CSS e JS',
+      explicacao:'I e II estão certas. O livro mostra o script incluído no final do <body>, não obrigatoriamente no head.' }
+  ]
+};
+
+D[3] = {
+  pistas: [
+    { conceito:'Função do CSS', pagina:52,
+      pergunta:'O que o CSS faz e qual a relação dele com o HTML e o JavaScript?',
+      resposta:'O CSS define a aparência (cores, tamanhos, posições) dos elementos que o HTML organiza. Separa conteúdo de apresentação: HTML estrutura, CSS estilo, JavaScript comportamento (p. 53).',
+      pegadinha:'Dizer que o CSS cria a estrutura da página ou adiciona interatividade.' },
+    { conceito:'Inline, interno e externo', pagina:53,
+      pergunta:'Como funciona cada forma de aplicar CSS e qual é a mais recomendada?',
+      resposta:'Inline usa o atributo style na própria tag (testes rápidos). Interno fica na tag <style> dentro do <head> (um só arquivo). Externo fica num arquivo .css ligado por <link> no head: o mais recomendado e profissional, pois reaproveita estilos em várias páginas (p. 54).',
+      pegadinha:'Dizer que o inline é o mais indicado para projetos grandes.' },
+    { conceito:'Regra: seletor, propriedade e valor', pagina:54,
+      pergunta:'Em p { color: red; font-size: 16px; }, o que é cada parte?',
+      resposta:'p é o seletor (todos os parágrafos), color e font-size são propriedades, red e 16px são valores. Estrutura: seletor { propriedade: valor; }.',
+      pegadinha:'Dizer que o seletor p pega elementos com a classe p, ou que font-size só aceita pixels.' },
+    { conceito:'Seletores de tag, classe e ID', pagina:55,
+      pergunta:'Qual símbolo usa a classe, qual usa o ID e quando usar cada um?',
+      resposta:'Tag estiliza todos de um tipo. Classe usa ponto (.destaque) e pode se repetir em vários elementos. ID usa # (#cabecalho) e é único na página (p. 56). Combinadores como nav ul li a selecionam pela hierarquia. Prefira classes; ID só quando necessário (p. 57).',
+      pegadinha:'Trocar os símbolos (classe com # e ID com ponto) ou dizer que o ID pode se repetir.' },
+    { conceito:'Propriedades e unidades', pagina:59,
+      pergunta:'Quais unidades são fixas e quais são relativas? A que se referem em e rem?',
+      resposta:'px é fixo. % é relativa ao elemento-pai, em à fonte do elemento-pai, rem à fonte do elemento raiz (html), vw à largura e vh à altura da tela. Para responsivo: em, rem, %, vw e vh. Margin é espaço externo e padding interno (p. 57).',
+      pegadinha:'Inverter em e rem, ou dizer que px é ideal para layouts responsivos.' },
+    { conceito:'Box model', pagina:60,
+      pergunta:'Quais são as 4 partes da caixa, de dentro para fora?',
+      resposta:'Content (conteúdo), padding (espaço interno até a borda), border (contorno) e margin (espaço externo que separa de outros elementos).',
+      pegadinha:'Trocar padding (interno) por margin (externo).' },
+    { conceito:'display: block, inline, flex, grid', pagina:61,
+      pergunta:'Como se comporta cada valor de display?',
+      resposta:'block ocupa a largura toda e começa em nova linha (div, p, section). inline ocupa só o necessário (span, a). inline-block permite largura e altura. flex alinha num eixo; grid organiza em linhas e colunas (bidimensional).',
+      pegadinha:'Dizer que inline começa em nova linha ou que grid só trabalha em um eixo.' },
+    { conceito:'position: static, relative, absolute, fixed', pagina:62,
+      pergunta:'Quais tiram o elemento do fluxo e qual acompanha a rolagem?',
+      resposta:'static segue o fluxo natural. relative move em relação à posição original sem sair do fluxo. absolute sai do fluxo e se posiciona pelo pai posicionado mais próximo. fixed fica parado na tela mesmo ao rolar.',
+      pegadinha:'Dizer que relative retira o elemento do fluxo ou que absolute acompanha a rolagem.' },
+    { conceito:'Responsivo, adaptativo e media queries', pagina:63,
+      pergunta:'Qual a diferença entre responsivo e adaptativo e o que faz uma media query?',
+      resposta:'Adaptativo cria versões diferentes por dispositivo; responsivo usa a mesma estrutura e ajusta proporções. Media queries aplicam estilos conforme a largura da tela, como @media (max-width: 600px) (p. 64).',
+      pegadinha:'Trocar as definições de responsivo e adaptativo.' },
+    { conceito:'Pré-processadores SASS e LESS', pagina:64,
+      pergunta:'O que os pré-processadores oferecem e são obrigatórios?',
+      resposta:'Adicionam variáveis, funções e aninhamento, e são compilados para CSS puro. SASS é mais popular hoje; LESS foi usado no Bootstrap 3 (p. 65). Não são obrigatórios para iniciantes: primeiro domine o CSS puro (p. 66).',
+      pegadinha:'Dizer que o navegador lê SASS diretamente ou que o uso é obrigatório para iniciantes.' }
+  ],
+  livro: {
+    1: { paginas:[52], conceito:'função do CSS' },
+    2: { paginas:[53], conceito:'separação entre HTML, CSS e JavaScript' },
+    3: { paginas:[54], conceito:'seletores, propriedades e valores' }
+  },
+  treino: [
+    { contexto:'Um site institucional tem 20 páginas, e a empresa trocou a cor principal da marca. O desenvolvedor precisa mudar a cor em todas as páginas da forma mais organizada possível.',
+      comando:'Sobre as formas de aplicar CSS, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O estilo inline é o mais indicado, porque fica dentro de cada tag e facilita a manutenção.', b:'O estilo interno, na tag <style>, permite reaproveitar os estilos automaticamente em todas as páginas.', c:'O CSS externo deve ser evitado em contextos profissionais.', d:'O CSS externo, em um arquivo .css ligado por <link> no <head>, permite reutilizar os mesmos estilos em várias páginas e facilita a manutenção.', e:'O CSS só pode ser aplicado com o atributo style.' },
+      correta:'d', pagina:54, conceito:'CSS externo',
+      explicacao:'O externo é a forma mais recomendada: um arquivo só estiliza várias páginas. Inline mistura estilo e conteúdo, e o interno fica preso a um único documento.' },
+    { contexto:'Na página de uma loja, todos os botões de compra devem ficar com fundo verde, e apenas o cabeçalho principal deve ficar centralizado. O desenvolvedor vai criar uma classe e usar um ID.',
+      comando:'Analise as afirmativas sobre seletores. É correto o que se afirma em:',
+      afirmativas:['O seletor de classe usa um ponto antes do nome, como .comprar, e pode ser aplicado a vários elementos.', 'O seletor de ID usa o símbolo #, como #cabecalho, e deve ser único na página.', 'O seletor h1 aplica o estilo somente ao primeiro título da página.'],
+      alternativas:{ a:'I, apenas.', b:'I e II, apenas.', c:'II e III, apenas.', d:'III, apenas.', e:'I, II e III.' },
+      correta:'b', pagina:55, conceito:'seletores de classe e ID',
+      explicacao:'I e II estão certas. O seletor de tag h1 aplica o estilo a todos os títulos h1, não só ao primeiro.' },
+    { contexto:'Ao montar um card de produto, um estudante quer afastar o texto da borda do card e, ao mesmo tempo, deixar um espaço entre um card e outro.',
+      comando:'Com base no box model, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O padding é o espaço interno entre o conteúdo e a borda, e a margin é o espaço externo que separa o card de outros elementos.', b:'A margin é o espaço interno, entre o conteúdo e a borda.', c:'A border é o espaço externo entre um card e outro.', d:'O box model tem apenas duas partes: conteúdo e borda.', e:'O padding fica do lado de fora da borda.' },
+      correta:'a', pagina:60, conceito:'padding e margin',
+      explicacao:'De dentro para fora: content, padding (interno), border (contorno) e margin (externo).' },
+    { contexto:'Um site precisa de um cabeçalho que permaneça visível mesmo quando o usuário rola a página, e de um balão de informação posicionado exatamente no canto de um card.',
+      comando:'Sobre a propriedade position, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O valor static fixa o elemento na tela durante a rolagem.', b:'O valor relative retira o elemento do fluxo normal da página.', c:'O valor fixed fixa o elemento na tela mesmo com a rolagem, e o absolute posiciona o elemento em relação ao pai posicionado mais próximo, fora do fluxo.', d:'O valor absolute sempre acompanha a rolagem da página.', e:'Todos os valores de position mantêm o elemento exatamente na ordem do código.' },
+      correta:'c', pagina:62, conceito:'position fixed e absolute',
+      explicacao:'fixed acompanha a tela na rolagem e absolute sai do fluxo, guiado pelo pai posicionado. static segue o fluxo natural e relative move o elemento sem tirá-lo do fluxo.' },
+    { contexto:'Uma empresa quer que seu site funcione bem no celular, no tablet e no notebook sem precisar manter várias versões diferentes do layout.',
+      comando:'Analise as afirmativas sobre design responsivo. É correto o que se afirma em:',
+      afirmativas:['O design responsivo usa a mesma estrutura e ajusta proporções e tamanhos conforme a tela.', 'O design adaptativo cria versões diferentes do layout para cada tipo de dispositivo.', 'Media queries aplicam estilos de forma condicional, conforme a largura da tela.', 'A unidade px é a mais indicada para layouts responsivos, por ser relativa.'],
+      alternativas:{ a:'I e IV, apenas.', b:'II e IV, apenas.', c:'I, III e IV, apenas.', d:'IV, apenas.', e:'I, II e III, apenas.' },
+      correta:'e', pagina:63, conceito:'responsivo e media queries',
+      explicacao:'I, II e III estão certas. A IV erra: px é medida fixa; para responsivo o livro indica em, rem, %, vw e vh.' },
+    { contexto:'Em um projeto grande, a mesma cor aparece em dezenas de regras CSS. Um colega sugeriu usar um pré-processador para guardar a cor em uma variável.',
+      comando:'Sobre os pré-processadores CSS, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O navegador interpreta arquivos SASS diretamente, sem compilação.', b:'Pré-processadores como SASS e LESS adicionam recursos como variáveis e aninhamento, e o código é compilado para CSS puro.', c:'O uso de pré-processadores é obrigatório para quem está começando a aprender CSS.', d:'O LESS é o pré-processador usado pelo Bootstrap 4 em diante.', e:'Pré-processadores eliminam a necessidade de conhecer CSS puro.' },
+      correta:'b', pagina:64, conceito:'SASS e LESS',
+      explicacao:'Eles trazem variáveis, funções e aninhamento e compilam para CSS puro. Não são obrigatórios para iniciantes, e o SASS é o mais usado em frameworks modernos como Bootstrap 4+.' }
+  ]
+};
+
+D[4] = {
+  pistas: [
+    { conceito:'Origem e papel do JavaScript', pagina:76,
+      pergunta:'Quem criou o JavaScript, quando e com qual nome inicial?',
+      resposta:'Brendan Eich, em 1995, com o nome LiveScript, para permitir interações no navegador. Hoje roda também no servidor (Node.js), em apps mobile e desktop.',
+      pegadinha:'Errar o ano ou o criador, ou dizer que só funciona no navegador.' },
+    { conceito:'Tripé: HTML, CSS e JavaScript', pagina:77,
+      pergunta:'Qual a função de cada linguagem no tripé da web?',
+      resposta:'HTML define estrutura e conteúdo, CSS define estilo e layout, JavaScript define o comportamento: como a página reage às ações do usuário.',
+      pegadinha:'Trocar os papéis, como dizer que o JavaScript define a aparência ou o CSS os comportamentos.' },
+    { conceito:'Linguagem interpretada e DOM', pagina:78,
+      pergunta:'O JavaScript precisa ser compilado? Como ele acessa os elementos da página?',
+      resposta:'É interpretado: o navegador executa direto, sem compilar, em tempo real enquanto o usuário interage. Node.js permite rodá-lo fora do navegador. Pelo DOM, cada elemento vira um objeto que o JS acessa (p. 79).',
+      pegadinha:'Dizer que o JavaScript precisa ser compilado antes ou que só roda depois de carregar todos os estilos e imagens.' },
+    { conceito:'var, let e const', pagina:80,
+      pergunta:'Qual a diferença entre let, const e var?',
+      resposta:'let permite mudar o valor depois. const não pode ser alterado (gera erro). var é mais antigo e menos previsível; hoje se usa principalmente let e const.',
+      pegadinha:'Dizer que const pode ser reatribuída ou que var é o mais recomendado hoje.' },
+    { conceito:'Tipos primitivos e conversão', pagina:81,
+      pergunta:'Quais são os 5 tipos primitivos do livro e a diferença entre undefined e null?',
+      resposta:'string (texto), number (números), boolean (true ou false), undefined (declarada sem valor) e null (vazia de propósito). Converta de forma explícita com String(), Number() e Boolean() (p. 82).',
+      pegadinha:'Trocar undefined (sem valor ainda) por null (ausência intencional).' },
+    { conceito:'Operadores: %, == e ===, &&, ||, !', pagina:82,
+      pergunta:'O que faz o %? Qual a diferença entre == e ===?',
+      resposta:'% dá o resto da divisão. == compara só o valor (10 == "10" é true); === compara valor e tipo (10 === "10" é false) e é mais seguro (p. 83). && exige todas verdadeiras, || pelo menos uma, ! inverte.',
+      pegadinha:'Dizer que === compara apenas o valor ou que % calcula porcentagem.' },
+    { conceito:'if, else if, else e switch', pagina:83,
+      pergunta:'Quando usar else if e quando usar switch? Para que servem break e default?',
+      resposta:'if testa uma condição e else trata o caso falso; else if testa outras faixas (p. 84). switch compara muitos valores de uma mesma variável; break encerra o caso e default responde quando nenhum caso bate (p. 85).',
+      pegadinha:'Dizer que o default só roda quando todos os casos são verdadeiros.' },
+    { conceito:'for, while e do while', pagina:86,
+      pergunta:'Quando usar cada laço de repetição?',
+      resposta:'for: quando se sabe quantas vezes repetir. while: quando não se sabe, repete enquanto a condição for verdadeira. do while: executa pelo menos uma vez antes de testar a condição (p. 87).',
+      pegadinha:'Dizer que o while sempre executa pelo menos uma vez (isso é o do while).' },
+    { conceito:'Funções: parâmetro, retorno e escopo', pagina:88,
+      pergunta:'Como declarar e chamar uma função, e onde existe uma variável criada dentro dela?',
+      resposta:'Declara com function nome() { } e só executa quando chamada: nome(). Parâmetros recebem valores externos e return devolve um resultado (p. 89). Variável criada dentro da função só existe ali dentro (p. 90).',
+      pegadinha:'Dizer que a função executa sozinha ao ser declarada.' },
+    { conceito:'Módulos: export e import', pagina:90,
+      pergunta:'Como dividir o código em módulos e o que o HTML precisa ter?',
+      resposta:'Exporta com export em um arquivo e importa com import { nome } from "./arquivo.js" em outro. O HTML usa <script type="module">. Vantagem: separar responsabilidades e reaproveitar sem copiar (p. 91).',
+      pegadinha:'Dizer que módulos obrigam a manter todo o código em um único arquivo.' }
+  ],
+  livro: {
+    1: { paginas:[77], conceito:'papéis de HTML, CSS e JavaScript' },
+    2: { paginas:[76], conceito:'função do JavaScript' },
+    3: { paginas:[78], conceito:'JavaScript interpretado pelo navegador' }
+  },
+  treino: [
+    { contexto:'Um desenvolvedor criou o código abaixo para testar comparações: console.log(10 == "10") e console.log(10 === "10"). Ele ficou confuso com os resultados diferentes.',
+      comando:'Sobre os operadores relacionais em JavaScript, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'Os dois comandos retornam true, pois os valores são iguais.', b:'O operador === compara apenas o valor, por isso retorna true.', c:'O operador == compara valor e tipo, por isso retorna false.', d:'Os dois comandos retornam false, pois um valor é texto.', e:'O == compara somente o valor e retorna true; o === compara valor e tipo e retorna false.' },
+      correta:'e', pagina:83, conceito:'== e ===',
+      explicacao:'== compara só o valor (true). === compara valor e tipo; como um é number e o outro string, retorna false. Por isso o === é mais seguro.' },
+    { contexto:'Em um sistema de cadastro, algumas informações nunca mudam durante a execução, como o ano de fundação da empresa, enquanto outras são atualizadas, como a idade de um cliente.',
+      comando:'Analise as afirmativas sobre declaração de variáveis. É correto o que se afirma em:',
+      afirmativas:['O let permite que o valor da variável seja alterado depois.', 'O const deve ser usado quando o valor não deve ser alterado; tentar mudá-lo gera erro.', 'O var é a forma mais moderna e previsível, preferida atualmente.'],
+      alternativas:{ a:'I e II, apenas.', b:'II, apenas.', c:'I e III, apenas.', d:'III, apenas.', e:'I, II e III.' },
+      correta:'a', pagina:80, conceito:'var, let e const',
+      explicacao:'I e II estão certas. O var é mais antigo e menos previsível; hoje se usam principalmente let e const.' },
+    { contexto:'Ao criar um formulário, um estudante declarou let telefone; sem atribuir valor. Em outro trecho, escreveu let desconto = null; para indicar que o cliente não tem desconto.',
+      comando:'Sobre os tipos de dados primitivos, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'As duas variáveis possuem o mesmo tipo e o mesmo significado.', b:'telefone é undefined, pois foi declarada sem valor, e desconto é null, uma ausência intencional de valor.', c:'telefone é null, pois o JavaScript esvazia variáveis de propósito.', d:'O tipo boolean representa textos escritos entre aspas.', e:'O tipo number representa apenas números inteiros.' },
+      correta:'b', pagina:81, conceito:'undefined e null',
+      explicacao:'Variável declarada sem valor é undefined. null indica ausência de valor intencional. Boolean é true ou false, e number aceita inteiros e decimais.' },
+    { contexto:'Uma loja on-line precisa exibir uma lista numerada com exatamente 10 produtos em destaque. Em outra tela, deve pedir a senha ao usuário pelo menos uma vez e repetir o pedido até que ele acerte.',
+      comando:'Assinale a alternativa que indica as estruturas de repetição mais adequadas para cada situação:', afirmativas:[],
+      alternativas:{ a:'while para os produtos e for para a senha.', b:'switch para os produtos e if para a senha.', c:'for para os produtos, pois se sabe quantas vezes repetir, e do while para a senha, pois executa pelo menos uma vez.', d:'do while para os produtos e switch para a senha.', e:'Nenhuma estrutura de repetição é adequada; o ideal é escrever linha por linha.' },
+      correta:'c', pagina:86, conceito:'for e do while',
+      explicacao:'O for serve quando o número de repetições é conhecido. O do while garante pelo menos uma execução antes de testar a condição, como no pedido de senha.' },
+    { contexto:'Um sistema escolar mostra mensagens diferentes conforme a nota: Excelente para 9 ou mais, Aprovado para 6 ou mais e Reprovado para o restante. Outra parte mostra mensagens para cada dia da semana.',
+      comando:'Analise as afirmativas sobre estruturas condicionais. É correto o que se afirma em:',
+      afirmativas:['O else if permite testar outras possibilidades além da primeira condição.', 'O switch é indicado para comparar muitos valores diferentes de uma mesma variável.', 'No switch, o default é executado quando nenhum dos casos previstos ocorre.', 'O else só pode ser usado dentro de um switch.'],
+      alternativas:{ a:'I, apenas.', b:'II e IV, apenas.', c:'III e IV, apenas.', d:'I, II e III, apenas.', e:'I, II, III e IV.' },
+      correta:'d', pagina:84, conceito:'if, else if e switch',
+      explicacao:'I, II e III estão certas. O else acompanha o if para tratar o caso em que a condição é falsa; não depende do switch.' },
+    { contexto:'Um projeto cresceu e todas as funções estão em um único arquivo enorme. A equipe decidiu separar as validações, os cálculos e as funções de usuário em arquivos diferentes.',
+      comando:'Sobre módulos JavaScript, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'Módulos exigem copiar e colar a mesma função em todos os arquivos.', b:'Para usar import e export, basta escrever <script> sem nenhum atributo.', c:'Uma função criada dentro de um módulo nunca pode ser usada em outro arquivo.', d:'Com export em um arquivo e import em outro, as funções são reaproveitadas, e o HTML usa <script type="module">.', e:'A modularização deixa o código mais difícil de manter em equipe.' },
+      correta:'d', pagina:90, conceito:'import e export',
+      explicacao:'Exporta-se o que será usado e importa-se onde for necessário, com o caminho do arquivo. O script precisa de type="module". Isso evita copiar código e facilita a manutenção.' }
+  ]
+};
+
+D[5] = {
+  pistas: [
+    { conceito:'O que é o DOM', pagina:100,
+      pergunta:'O que o navegador constrói ao carregar o HTML e para que serve?',
+      resposta:'O DOM (Document Object Model): uma estrutura de nós em que cada elemento do HTML vira um objeto que o JavaScript acessa e manipula. É a ponte entre o HTML e a programação interativa. React e Vue também atuam sobre o DOM.',
+      pegadinha:'Dizer que o DOM é uma linguagem, uma biblioteca ou que substitui o HTML.' },
+    { conceito:'Árvore de nós e tipos de nó', pagina:101,
+      pergunta:'Qual é a raiz da árvore e quais são os 3 tipos de nó?',
+      resposta:'A raiz é o <html>, com filhos <head> e <body>. Tipos: nós de elemento (tags como h1, p), nós de texto (o conteúdo) e nós de atributo (id="menu", class="destaque").',
+      pegadinha:'Dizer que a raiz da árvore é o <body>.' },
+    { conceito:'Métodos de seleção', pagina:104,
+      pergunta:'O que cada método de seleção devolve?',
+      resposta:'getElementById: um único elemento. getElementsByClassName e getElementsByTagName: lista de elementos. querySelector: o primeiro que bate com um seletor CSS. querySelectorAll: todos os que batem.',
+      pegadinha:'Dizer que querySelectorAll retorna só um elemento ou que querySelector exige atributo name.' },
+    { conceito:'textContent, innerHTML e setAttribute', pagina:105,
+      pergunta:'Qual a diferença entre textContent e innerHTML, e qual o cuidado com o innerHTML?',
+      resposta:'textContent troca só o texto. innerHTML aceita conteúdo com HTML, mas pode abrir brecha para injeção de código com dados do usuário (p. 106). setAttribute altera atributos como href e src; style muda o CSS, mas o ideal é alternar classes.',
+      pegadinha:'Dizer que o innerHTML é sempre seguro com dados digitados pelo usuário.' },
+    { conceito:'createElement, appendChild e remove', pagina:107,
+      pergunta:'Como criar um item e colocá-lo na lista, e como remover um elemento?',
+      resposta:'document.createElement("li") cria; textContent preenche; appendChild insere dentro do elemento pai. Para remover, usa-se .remove() no próprio elemento.',
+      pegadinha:'Trocar as funções: dizer que appendChild remove ou que createElement já insere na página.' },
+    { conceito:'Eventos e addEventListener', pagina:108,
+      pergunta:'O que são eventos e quais os dois parâmetros do addEventListener?',
+      resposta:'Eventos são sinais do navegador quando algo acontece (clique, tecla, envio). addEventListener recebe o tipo do evento ("click", "input") e a função a executar.',
+      pegadinha:'Dizer que eventos só funcionam em botões.' },
+    { conceito:'Tipos de evento e preventDefault', pagina:111,
+      pergunta:'Quando usar click, input, change, submit e mouseover? O que faz o preventDefault?',
+      resposta:'click em botões e links; input a cada digitação; change quando o conteúdo muda e o campo perde o foco; submit no envio do formulário; mouseover ao passar o mouse (p. 112). preventDefault impede o envio automático e o recarregamento.',
+      pegadinha:'Dizer que o preventDefault envia o formulário mais rápido.' },
+    { conceito:'jQuery', pagina:112,
+      pergunta:'O que é o jQuery e como fica o mesmo comando nele?',
+      resposta:'Biblioteca JavaScript que simplifica seleção, eventos, animações e AJAX. $("#mensagem").text("Olá!") equivale ao getElementById com textContent. Seletores: $("#id"), $(".classe"), $("tag"); métodos .text(), .html(), .attr(), .css() e .click() (p. 113 e 114).',
+      pegadinha:'Dizer que o jQuery é uma linguagem diferente do JavaScript ou que usa seletores próprios, diferentes do CSS.' },
+    { conceito:'Exemplo da lista interativa', pagina:115,
+      pergunta:'Quais métodos o exemplo da lista de tarefas junta?',
+      resposta:'getElementById captura os elementos, addEventListener escuta o clique, createElement cria o li, textContent coloca o texto e appendChild insere na lista, sem recarregar a página (p. 116).',
+      pegadinha:'Dizer que a página precisa ser recarregada para o item aparecer.' }
+  ],
+  livro: {
+    1: { paginas:[100, 101], conceito:'DOM como árvore de nós' },
+    2: { paginas:[100], conceito:'DOM e manipulação com JavaScript' },
+    3: { paginas:[104], conceito:'querySelector e querySelectorAll' }
+  },
+  treino: [
+    { contexto:'Em uma página com três parágrafos de classe aviso, um desenvolvedor quer mudar só o primeiro deles e, em outro momento, aplicar uma borda em todos.',
+      comando:'Sobre os métodos de seleção do DOM, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'querySelector(".aviso") retorna o primeiro elemento com a classe, e querySelectorAll(".aviso") retorna todos.', b:'querySelectorAll(".aviso") retorna apenas o último elemento encontrado.', c:'querySelector só funciona com IDs, nunca com classes.', d:'getElementById retorna uma lista com todos os elementos da página.', e:'getElementsByClassName retorna sempre um único elemento.' },
+      correta:'a', pagina:104, conceito:'querySelector e querySelectorAll',
+      explicacao:'querySelector devolve o primeiro e querySelectorAll todos os que batem com o seletor CSS. getElementById devolve um elemento e getElementsByClassName uma lista.' },
+    { contexto:'Um blog permite que leitores escrevam comentários, que depois são exibidos na página. O estagiário pensou em mostrar o texto digitado usando innerHTML.',
+      comando:'Analise as afirmativas sobre alteração de conteúdo. É correto o que se afirma em:',
+      afirmativas:['O textContent substitui o texto interno de um elemento.', 'O innerHTML permite inserir conteúdo com tags HTML.', 'Usar innerHTML com dados vindos do usuário pode abrir brechas para injeção de código.', 'O setAttribute serve exclusivamente para alterar a cor do texto.'],
+      alternativas:{ a:'I e IV, apenas.', b:'II e IV, apenas.', c:'I, II e III, apenas.', d:'III, apenas.', e:'I, II, III e IV.' },
+      correta:'c', pagina:105, conceito:'textContent, innerHTML e setAttribute',
+      explicacao:'I, II e III estão certas. O setAttribute altera atributos como href, src e alt, não apenas cor.' },
+    { contexto:'Em uma lista de compras on-line, cada vez que o usuário digita um produto e clica em Adicionar, um novo item precisa aparecer na lista, sem recarregar a página.',
+      comando:'Assinale a alternativa que descreve corretamente os métodos usados:', afirmativas:[],
+      alternativas:{ a:'O remove() cria um novo elemento <li>.', b:'O createElement("li") cria o item, e o appendChild insere esse item dentro da lista.', c:'O appendChild apaga o último item da lista.', d:'O createElement exibe o item na página automaticamente, sem precisar de appendChild.', e:'Para adicionar itens é obrigatório recarregar a página.' },
+      correta:'b', pagina:107, conceito:'createElement e appendChild',
+      explicacao:'createElement cria o elemento, textContent coloca o texto e appendChild o insere no pai. O remove() serve para apagar elementos.' },
+    { contexto:'Um formulário de contato precisa validar os dados com JavaScript antes do envio, sem que a página seja recarregada automaticamente.',
+      comando:'Sobre eventos de formulário, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O evento mouseover dispara quando o formulário é enviado.', b:'O evento change dispara a cada tecla digitada.', c:'O preventDefault acelera o envio do formulário ao servidor.', d:'No evento submit, o preventDefault impede o envio automático e o recarregamento, permitindo validar os dados.', e:'Formulários não podem ter eventos associados.' },
+      correta:'d', pagina:111, conceito:'submit e preventDefault',
+      explicacao:'O submit permite interceptar o envio, e o preventDefault bloqueia o comportamento padrão. mouseover é passar o mouse, input dispara a cada digitação e change quando o campo muda e perde o foco.' },
+    { contexto:'Um time mantém um site antigo feito com jQuery e precisa entender o comando $(".destaque").css("color", "blue"); antes de fazer alterações.',
+      comando:'Analise as afirmativas sobre o jQuery. É correto o que se afirma em:',
+      afirmativas:['O jQuery é uma biblioteca JavaScript que simplifica a manipulação do DOM e de eventos.', 'O comando muda para azul a cor do texto de todos os elementos com a classe destaque.', 'Os seletores do jQuery seguem a mesma lógica dos seletores CSS.', 'O jQuery é uma linguagem de programação independente do JavaScript.'],
+      alternativas:{ a:'I, II e III, apenas.', b:'I e IV, apenas.', c:'II e IV, apenas.', d:'IV, apenas.', e:'I, II, III e IV.' },
+      correta:'a', pagina:113, conceito:'seletores e métodos do jQuery',
+      explicacao:'I, II e III estão certas. O jQuery é uma biblioteca escrita em JavaScript, não uma linguagem independente.' },
+    { contexto:'Ao estudar como o navegador organiza uma página, uma estudante desenhou uma árvore a partir do código <body><h1>Minha Página</h1><p>Bem-vindo!</p></body>.',
+      comando:'Sobre a estrutura de nós do DOM, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'A raiz da árvore do DOM é o elemento <body>.', b:'O texto Minha Página é um nó de atributo.', c:'O DOM não diferencia elementos, textos e atributos.', d:'O <h1> e o <p> não têm relação hierárquica com o <body>.', e:'O <body> é um nó com dois filhos, <h1> e <p>, e cada um tem um nó de texto com seu conteúdo.' },
+      correta:'e', pagina:102, conceito:'árvore de nós',
+      explicacao:'body tem dois filhos e cada um guarda um nó de texto. A raiz da árvore é o <html>, e existem nós de elemento, de texto e de atributo.' }
+  ]
+};
+
+D[6] = {
+  pistas: [
+    { conceito:'Editor de código e VS Code', pagina:126,
+      pergunta:'O que um editor de código oferece a mais que o Bloco de Notas, e quem criou o VS Code?',
+      resposta:'Realce de sintaxe, sugestões automáticas, terminal integrado e extensões. O VS Code é gratuito, da Microsoft, com terminal integrado, Git, depuração e extensões (p. 127).',
+      pegadinha:'Dizer que o VS Code é pago ou que não tem integração com Git.' },
+    { conceito:'Extensões do VS Code', pagina:130,
+      pergunta:'Qual a função de cada extensão citada no livro?',
+      resposta:'Live Server: servidor local que recarrega a página ao salvar. Prettier: formata o código. ESLint: aponta erros e más práticas no JS. HTML CSS Support: sugere classes. JavaScript (ES6) Code Snippets: trechos prontos de código. Color Highlight: mostra as cores no código. Atalho das extensões: Ctrl+Shift+X (p. 129).',
+      pegadinha:'Trocar as funções, como dizer que o Live Server formata o código ou que o Prettier aponta erros de lógica.' },
+    { conceito:'Console e inspetor (DevTools)', pagina:131,
+      pergunta:'Para que servem o console e o inspetor de elementos?',
+      resposta:'O console mostra mensagens do JavaScript, console.log() para testes e erros do código, e permite testar comandos. O inspetor mostra o HTML como o navegador interpretou (o DOM) e permite ver e editar HTML e CSS temporariamente (p. 132).',
+      pegadinha:'Trocar os papéis: dizer que o console edita o CSS e o inspetor mostra erros de JavaScript.' },
+    { conceito:'Abas Sources e Performance', pagina:134,
+      pergunta:'O que se faz na aba Sources (Fontes) e na aba Performance (Desempenho)?',
+      resposta:'Sources: ver os arquivos carregados e usar breakpoints para pausar a execução e examinar variáveis. Performance: medir a velocidade de carregamento e renderização e achar gargalos.',
+      pegadinha:'Dizer que breakpoints ficam na aba Performance.' },
+    { conceito:'Linter e formatador', pagina:136,
+      pergunta:'Qual a diferença entre linter e formatador?',
+      resposta:'O linter é o fiscal: analisa o código sem executar e acha erros e más práticas (variáveis não usadas, == em vez de ===). O formatador é o organizador: só ajusta a aparência (indentação, aspas, ponto e vírgula), sem sinalizar erros.',
+      pegadinha:'Dizer que o formatador encontra erros de lógica ou que o linter executa o código.' },
+    { conceito:'ESLint: instalação e configuração', pagina:137,
+      pergunta:'Quais comandos instalam e configuram o ESLint e que arquivo é criado?',
+      resposta:'Precisa de Node.js e npm. npm install eslint --save-dev instala; npx eslint --init configura com perguntas; cria o .eslintrc.json. Pode ser integrado ao Prettier.',
+      pegadinha:'Dizer que o ESLint dispensa o Node.js ou que as regras não podem ser ajustadas.' },
+    { conceito:'Controle de versão e fluxo Git', pagina:139,
+      pergunta:'Qual a ordem dos comandos básicos do Git?',
+      resposta:'git init cria o repositório, git add escolhe os arquivos, git commit -m "mensagem" registra, git log mostra o histórico. Branches isolam novas funções e o merge as junta à principal (main ou master).',
+      pegadinha:'Dizer que o commit vem antes do add.' },
+    { conceito:'GitHub e repositório remoto', pagina:140,
+      pergunta:'O que fazem push e pull, e o que são fork, issue e pull request?',
+      resposta:'git remote add origin conecta ao GitHub; git push origin main envia ao remoto; git pull traz as mudanças dos outros. Fork é cópia independente, issue reporta problemas, pull request propõe e revisa mudanças. Local fica no seu computador; remoto no GitHub.',
+      pegadinha:'Inverter push e pull.' },
+    { conceito:'Git e GitHub no VS Code', pagina:141,
+      pergunta:'Onde o VS Code mostra o versionamento e qual extensão trata dos pull requests?',
+      resposta:'Na aba Source Control (Controle de Código-Fonte) dá para fazer commit, push, pull, merge e trocar de branch. A extensão GitHub Pull Requests permite interagir com pull requests no editor.',
+      pegadinha:'Dizer que é obrigatório usar só o terminal para versionar.' }
+  ],
+  livro: {
+    1: { paginas:[130], conceito:'extensões do VS Code' },
+    2: { paginas:[131], conceito:'console do navegador' },
+    3: { paginas:[131], conceito:'depurar erros com o console' }
+  },
+  treino: [
+    { contexto:'Uma desenvolvedora quer ver as mudanças no navegador assim que salva o arquivo e também deixar o código com indentação padronizada automaticamente.',
+      comando:'Assinale a alternativa que associa corretamente as extensões às suas funções:', afirmativas:[],
+      alternativas:{ a:'Color Highlight recarrega a página e ESLint formata a indentação.', b:'Prettier cria um servidor local e Live Server corrige a indentação.', c:'HTML CSS Support executa o JavaScript no navegador.', d:'Live Server cria um servidor local que recarrega a página ao salvar, e Prettier formata o código automaticamente.', e:'JavaScript (ES6) Code Snippets mostra a pré-visualização das cores.' },
+      correta:'d', pagina:130, conceito:'Live Server e Prettier',
+      explicacao:'Live Server recarrega a página ao salvar e Prettier formata. ESLint aponta erros, Snippets dá trechos prontos e Color Highlight mostra as cores.' },
+    { contexto:'Em uma equipe, um colega comentou: um deles é o fiscal do código e o outro é o organizador.',
+      comando:'Analise as afirmativas sobre linters e formatadores. É correto o que se afirma em:',
+      afirmativas:['O linter analisa o código em busca de erros e más práticas, sem executá-lo.', 'O formatador ajusta a aparência do código, como indentação e aspas, sem sinalizar erros.', 'O linter pode apontar o uso de == em vez de ===.', 'O formatador é o responsável por executar os testes do código.'],
+      alternativas:{ a:'I, II e III, apenas.', b:'I e IV, apenas.', c:'II e IV, apenas.', d:'III e IV, apenas.', e:'I, II, III e IV.' },
+      correta:'a', pagina:136, conceito:'linter e formatador',
+      explicacao:'I, II e III estão certas. O formatador só cuida da estética; ele não executa testes.' },
+    { contexto:'Um estudante terminou uma funcionalidade e quer registrá-la no histórico do Git, mas o comando de registro não incluiu os arquivos alterados.',
+      comando:'Sobre o fluxo básico de trabalho com Git, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O git log envia os commits ao GitHub.', b:'Primeiro se adicionam os arquivos com git add e depois se registra com git commit -m "mensagem".', c:'O git init registra as alterações feitas nos arquivos.', d:'O git commit deve vir sempre antes do git add.', e:'O merge apaga a branch principal do projeto.' },
+      correta:'b', pagina:139, conceito:'git add e git commit',
+      explicacao:'git add informa quais arquivos acompanhar e git commit registra. git init cria o repositório, git log mostra o histórico e o merge junta branches.' },
+    { contexto:'Duas pessoas trabalham no mesmo projeto hospedado no GitHub. Uma delas enviou novos commits, e a outra precisa atualizar o repositório no próprio computador.',
+      comando:'Sobre repositórios remotos e GitHub, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O git push traz para o computador as mudanças feitas pelos colegas.', b:'O repositório remoto fica obrigatoriamente no computador de cada desenvolvedor.', c:'O git pull traz as mudanças do repositório remoto, e o git push envia os commits locais para ele.', d:'Um fork é o comando que apaga um repositório.', e:'Pull requests servem apenas para baixar arquivos.' },
+      correta:'c', pagina:140, conceito:'push e pull',
+      explicacao:'pull traz do remoto e push envia para ele. O remoto fica no GitHub. Fork é uma cópia independente e pull request é para revisar e integrar mudanças.' },
+    { contexto:'Um botão de compra parou de funcionar e o desenvolvedor quer pausar a execução do JavaScript em uma linha específica para ver o valor das variáveis naquele momento.',
+      comando:'Sobre as ferramentas de desenvolvedor do navegador, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'A aba Performance permite adicionar breakpoints no código.', b:'O inspetor de elementos executa os testes automatizados.', c:'O console não mostra erros, apenas mensagens do console.log().', d:'As DevTools só existem no Google Chrome.', e:'Na aba Sources (Fontes) é possível adicionar breakpoints para interromper a execução e examinar as variáveis.' },
+      correta:'e', pagina:134, conceito:'aba Sources e breakpoints',
+      explicacao:'Breakpoints ficam na aba Sources. Performance mede velocidade, o console mostra erros e mensagens, e as DevTools existem em Chrome, Firefox e Edge.' },
+    { contexto:'Uma equipe vai começar a usar o ESLint em um projeto JavaScript e precisa preparar o ambiente.',
+      comando:'Analise as afirmativas sobre o ESLint. É correto o que se afirma em:',
+      afirmativas:['É necessário ter o Node.js e o npm instalados.', 'O comando npm install eslint --save-dev instala o ESLint como dependência de desenvolvimento.', 'Depois de configurado, as regras do ESLint nunca podem ser alteradas.'],
+      alternativas:{ a:'III, apenas.', b:'I e II, apenas.', c:'I e III, apenas.', d:'II e III, apenas.', e:'I, II e III.' },
+      correta:'b', pagina:137, conceito:'instalação do ESLint',
+      explicacao:'I e II estão certas. As regras ficam no .eslintrc.json e podem ser desativadas ou alteradas conforme o projeto.' }
+  ]
+};
+
+D[7] = {
+  pistas: [
+    { conceito:'Biblioteca x framework', pagina:152,
+      pergunta:'Qual a diferença entre biblioteca e framework e o que é inversão de controle?',
+      resposta:'Biblioteca é um conjunto de funções que você chama quando quiser (React, que tecnicamente é biblioteca). Framework define a arquitetura e chama o seu código: o controle é invertido, quem decide é o framework (Angular) (p. 153).',
+      pegadinha:'Dizer que o React é tecnicamente um framework ou que na biblioteca quem controla o fluxo é ela.' },
+    { conceito:'Vantagens: produtividade, padronização, confiabilidade', pagina:153,
+      pergunta:'Quais são as três vantagens citadas e quais os limites delas?',
+      resposta:'Produtividade (não reinventar a roda), padronização (facilita colaboração e reduz a curva de aprendizado de novos membros) e confiabilidade (evitam erros comuns) (p. 154). Ajudam, mas não garantem zero erros nem dispensam conhecimento.',
+      pegadinha:'Dizer que frameworks garantem 100% de segurança contra erros ou eliminam a necessidade de saber programar.' },
+    { conceito:'React, Vue.js e Angular', pagina:155,
+      pergunta:'Quem mantém cada um e qual a característica principal de cada?',
+      resposta:'React: biblioteca do Facebook, componentes e JSX, flexível, exige escolher ferramentas extras. Vue.js: framework progressivo, simples, curva suave, com Vue Router e Vuex. Angular: framework completo e opinativo do Google, indicado para projetos grandes (p. 156).',
+      pegadinha:'Atribuir o Vue Router ao React ou dizer que o Angular é o mais simples para iniciantes.' },
+    { conceito:'React e o padrão MVC', pagina:156,
+      pergunta:'Em qual camada do MVC o React atua e o que faz cada camada?',
+      resposta:'O React cuida só da View. Model: dados e regras de negócio. View: exibe a interface. Controller: interpreta as ações e coordena dados e interface (p. 157).',
+      pegadinha:'Dizer que o React cuida das três camadas do MVC.' },
+    { conceito:'Virtual DOM, JSX e SPA', pagina:157,
+      pergunta:'O que é o Virtual DOM, a reconciliação e o JSX?',
+      resposta:'O React cria uma cópia virtual do DOM, compara com a anterior (reconciliação) e aplica só as diferenças no DOM real. JSX mistura HTML no JavaScript e é convertido pelo Babel em React.createElement() (p. 158). Muito usado em SPA (aplicação de página única).',
+      pegadinha:'Dizer que o React atualiza o DOM real inteiro a cada mudança.' },
+    { conceito:'Componentes, props e state', pagina:158,
+      pergunta:'Quais os tipos de componente e a diferença entre props e state?',
+      resposta:'Componentes de função (os mais usados, com hooks) e de classe. Props vêm do componente-pai, como parâmetros de função. State é interno, criado com useState; quando muda, o componente é renderizado de novo (p. 159 e 160).',
+      pegadinha:'Dizer que props são dados internos que o próprio componente altera.' },
+    { conceito:'Ciclo de vida e useEffect', pagina:160,
+      pergunta:'Quais as três fases do ciclo de vida e como o useEffect se comporta?',
+      resposta:'Montagem, atualização e desmontagem (p. 161). useEffect com [] roda só uma vez, na montagem; com [variável], quando ela muda; a função de retorno faz a limpeza na desmontagem (p. 162).',
+      pegadinha:'Dizer que o useEffect com [] roda a cada atualização.' },
+    { conceito:'Criar projeto React', pagina:163,
+      pergunta:'Quais ferramentas e comandos o livro usa para criar o projeto?',
+      resposta:'Node.js (com npm) e um editor. node -v e npm -v conferem a instalação. npx create-react-app meu-app cria o projeto; cd meu-app e npm start iniciam o servidor (p. 164).',
+      pegadinha:'Dizer que o React só pode ser instalado manualmente.' },
+    { conceito:'Bootstrap', pagina:168,
+      pergunta:'Quem criou o Bootstrap e o que ele oferece?',
+      resposta:'Criado pelo Twitter, oferece componentes visuais prontos (botões, cards, modais) e grid responsivo de 12 colunas. Entra pelo link CDN no head. Botão: class="btn btn-primary" (p. 169). Grid com row, col, col-md-6 (p. 170).',
+      pegadinha:'Dizer que o Bootstrap foi criado pelo Google ou que seu grid tem 10 colunas.' }
+  ],
+  livro: {
+    1: { paginas:[153, 154], conceito:'vantagens de frameworks e bibliotecas' },
+    2: { paginas:[153], conceito:'padronização e colaboração' },
+    3: { paginas:[155], conceito:'React, Vue.js e Angular' }
+  },
+  treino: [
+    { contexto:'Em uma reunião, um desenvolvedor afirmou que o React é um framework completo. Uma colega corrigiu dizendo que existe uma diferença técnica importante.',
+      comando:'Sobre bibliotecas e frameworks, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'Na biblioteca, o fluxo da aplicação é sempre controlado pela própria biblioteca.', b:'O Angular é tecnicamente uma biblioteca focada apenas na interface.', c:'O React é tecnicamente uma biblioteca; no framework, o controle é invertido, pois é ele que chama o seu código.', d:'Frameworks e bibliotecas são exatamente a mesma coisa.', e:'Bibliotecas impõem uma arquitetura rígida ao projeto.' },
+      correta:'c', pagina:153, conceito:'inversão de controle',
+      explicacao:'Na biblioteca, o desenvolvedor decide quando chamá-la. No framework, quem decide é o framework (inversão de controle). O React é biblioteca e o Angular é framework completo.' },
+    { contexto:'Uma empresa vai iniciar três projetos: um sistema corporativo enorme, um site pequeno feito por um freelancer iniciante e uma aplicação em que o time quer liberdade para escolher roteador e gerenciador de estado.',
+      comando:'Analise as afirmativas sobre a escolha da ferramenta. É correto o que se afirma em:',
+      afirmativas:['O Angular é indicado para o sistema corporativo, por ser completo e ter padronização forte.', 'O Vue.js é indicado para o freelancer, pela curva de aprendizado suave.', 'O React é indicado para o time que quer liberdade de escolha das ferramentas.', 'O Vue Router e o Vuex fazem parte do ecossistema oficial do React.'],
+      alternativas:{ a:'I e IV, apenas.', b:'I, II e III, apenas.', c:'II e IV, apenas.', d:'III e IV, apenas.', e:'I, II, III e IV.' },
+      correta:'b', pagina:156, conceito:'escolha entre React, Vue e Angular',
+      explicacao:'I, II e III estão certas. Vue Router e Vuex são do Vue; no React se usam, por exemplo, React Router e Redux.' },
+    { contexto:'Um componente Contador mostra quantas vezes um botão foi clicado. Em outra tela, um componente Saudacao é usado duas vezes, uma com o nome Maria e outra com Carlos.',
+      comando:'Sobre props e state no React, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O state é recebido do componente-pai, como parâmetro de função.', b:'As props são dados internos que mudam a cada clique.', c:'Quando o state muda, a interface só atualiza se a página for recarregada.', d:'O useState é usado para criar props.', e:'O nome em Saudacao chega por props, vindas do componente-pai, e o número de cliques fica no state, criado com useState.' },
+      correta:'e', pagina:159, conceito:'props e state',
+      explicacao:'Props vêm do pai, como parâmetros. State é interno, criado com useState, e quando muda o React renderiza o componente de novo automaticamente.' },
+    { contexto:'Uma aplicação React atualiza a tela muitas vezes por segundo. A equipe quer entender por que, mesmo assim, o desempenho continua bom.',
+      comando:'Sobre o funcionamento do React, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O React compara uma cópia virtual do DOM com a versão anterior (reconciliação) e aplica só as diferenças no DOM real.', b:'O React reconstrói o DOM real inteiro a cada mudança.', c:'O JSX é executado diretamente pelo navegador, sem conversão.', d:'O React atua nas camadas Model e Controller do MVC.', e:'Componentes de classe são os mais usados atualmente, por causa dos hooks.' },
+      correta:'a', pagina:157, conceito:'Virtual DOM e reconciliação',
+      explicacao:'O Virtual DOM evita atualizações custosas. O JSX é convertido pelo Babel, o React cuida só da View, e os componentes de função são os mais usados com hooks.' },
+    { contexto:'Um componente Relogio usa useEffect com um setInterval e uma função de retorno com clearInterval. O array de dependências está vazio: [].',
+      comando:'Analise as afirmativas sobre o ciclo de vida. É correto o que se afirma em:',
+      afirmativas:['Com o array vazio, o efeito é executado apenas uma vez, na montagem.', 'A função de retorno faz a limpeza quando o componente é desmontado.', 'A atualização acontece quando props ou state mudam.'],
+      alternativas:{ a:'I, apenas.', b:'II, apenas.', c:'I e III, apenas.', d:'I, II e III.', e:'II e III, apenas.' },
+      correta:'d', pagina:162, conceito:'useEffect',
+      explicacao:'As três estão certas: [] roda só na montagem, o retorno limpa na desmontagem e a atualização vem de mudanças em props ou state (p. 161).' },
+    { contexto:'Um estudante precisa montar rapidamente um protótipo com botões estilizados e layout que se adapte ao celular, sem escrever todo o CSS do zero.',
+      comando:'Sobre o Bootstrap, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O Bootstrap foi criado pelo Google e só funciona com Angular.', b:'O grid do Bootstrap é baseado em 10 colunas.', c:'Para usar o Bootstrap é obrigatório instalar o Node.js.', d:'O Bootstrap oferece componentes prontos e grid responsivo de 12 colunas, e pode ser incluído por um link CDN no <head>.', e:'A classe btn btn-primary cria um formulário de cadastro.' },
+      correta:'d', pagina:168, conceito:'Bootstrap',
+      explicacao:'Criado pelo Twitter, o Bootstrap traz componentes prontos e grid de 12 colunas, e basta o link CDN. A classe btn btn-primary cria um botão estilizado.' }
+  ]
+};
+
+D[8] = {
+  pistas: [
+    { conceito:'Usabilidade e UX', pagina:178,
+      pergunta:'O que é usabilidade e qual a relação dela com a experiência do usuário?',
+      resposta:'É a facilidade com que as pessoas usam uma interface para alcançar seus objetivos, de forma fluida e intuitiva. É um pilar da UX: considera clareza, organização, velocidade e previsibilidade, reduz erros e aumenta a satisfação (p. 179).',
+      pegadinha:'Dizer que usabilidade é só a aparência bonita do site.' },
+    { conceito:'Acessibilidade digital e quem ela beneficia', pagina:179,
+      pergunta:'A acessibilidade beneficia só pessoas com deficiência permanente?',
+      resposta:'Não. Inclui deficiência visual, auditiva, motora e intelectual, mas também situações temporárias, como braço imobilizado ou internet ruim. Legenda e bom contraste ajudam todo mundo (p. 180).',
+      pegadinha:'Dizer que acessibilidade atende exclusivamente pessoas com deficiência permanente.' },
+    { conceito:'LBI e WCAG (POUR e níveis)', pagina:180,
+      pergunta:'Qual é a lei brasileira, quem criou a WCAG, quais os princípios e níveis?',
+      resposta:'LBI, Lei nº 13.146/2015. A WCAG é do W3C, com os princípios POUR: Perceptível, Operável, Compreensível e Robusto. Níveis A (mínimo), AA (intermediário) e AAA (mais completo). No Brasil, a maioria das exigências se baseia no AA.',
+      pegadinha:'Dizer que o Brasil exige o nível AAA ou trocar as letras do POUR.' },
+    { conceito:'HTML semântico e títulos', pagina:181,
+      pergunta:'Por que preferir header, nav, main e footer em vez de div e span?',
+      resposta:'div e span não têm significado. As tags semânticas descrevem a função de cada parte e permitem que o leitor de tela pule para o nav ou o main. Títulos h1 a h6 devem ter hierarquia; usar h3 como título principal confunde.',
+      pegadinha:'Dizer que trocar tudo por div e span deixa a página mais acessível.' },
+    { conceito:'alt, ARIA e tabindex', pagina:182,
+      pergunta:'Como tratar imagem decorativa, quando usar ARIA e o que faz o tabindex?',
+      resposta:'alt descreve a imagem para leitores de tela; imagem decorativa usa alt="". ARIA (aria-label, aria-hidden) serve para componentes complexos, mas prefira elementos nativos. tabindex="0" entra na ordem do Tab; valor negativo tira da navegação.',
+      pegadinha:'Dizer que o ARIA deve substituir sempre os elementos nativos do HTML.' },
+    { conceito:'Contraste, cor e legibilidade', pagina:183,
+      pergunta:'Quais as taxas de contraste mínimas e o tamanho mínimo de texto?',
+      resposta:'4.5:1 para texto normal e 3:1 para texto grande (21:1 é preto no branco). Não use só a cor para passar informação; complemente com ícones ou texto. Corpo do texto com pelo menos 16px (p. 184).',
+      pegadinha:'Inverter as taxas (3:1 para texto normal) ou dizer que a cor sozinha basta.' },
+    { conceito:'Teclado, foco e multimídia', pagina:184,
+      pergunta:'Quais as boas práticas de teclado e os recursos para vídeos e áudios?',
+      resposta:'Ordem lógica de tabulação, foco visível e evitar armadilhas de foco (p. 185). Multimídia: legendas sincronizadas (com sons como [risos]), audiodescrição para pessoas cegas e transcrições textuais (p. 186).',
+      pegadinha:'Dizer que esconder o estilo de foco melhora a acessibilidade.' },
+    { conceito:'Testes de usabilidade x acessibilidade', pagina:186,
+      pergunta:'Qual a diferença de foco entre os dois tipos de teste?',
+      resposta:'Usabilidade avalia se a interface é intuitiva, eficiente e agradável para os usuários em geral. Acessibilidade avalia se pessoas com deficiência usam com autonomia: teclado, leitor de tela, contraste (p. 187). São complementares.',
+      pegadinha:'Dizer que os dois testes são a mesma coisa.' },
+    { conceito:'Ferramentas e testes manuais', pagina:188,
+      pergunta:'O que fazem Lighthouse, WAVE e Axe DevTools, e por que fazer teste manual?',
+      resposta:'Lighthouse (no Chrome): relatórios de desempenho, SEO e acessibilidade com pontuação. WAVE: ícones sobre a página mostrando erros. Axe DevTools (Deque): varreduras pela WCAG e integração com CI/CD. Automáticas não substituem testes manuais: tecla Tab, NVDA, VoiceOver e usuários reais (p. 189).',
+      pegadinha:'Dizer que as ferramentas automáticas dispensam testes manuais.' },
+    { conceito:'Acessibilidade e SEO', pagina:190,
+      pergunta:'Por que acessibilidade melhora o SEO?',
+      resposta:'Os robôs leem o site como um leitor de tela: sequencial e semântico. HTML semântico, alt nas imagens, títulos hierárquicos, links informativos (nada de clique aqui) e boa legibilidade ajudam o ranqueamento (p. 191 e 192).',
+      pegadinha:'Dizer que acessibilidade não tem relação com SEO.' }
+  ],
+  livro: {
+    1: { paginas:[178], conceito:'usabilidade' },
+    2: { paginas:[179], conceito:'acessibilidade e limitações temporárias' },
+    3: { paginas:[181], conceito:'HTML semântico e títulos' }
+  },
+  treino: [
+    { contexto:'Uma prefeitura vai lançar um portal de serviços e precisa seguir as normas de acessibilidade. A equipe pesquisou a legislação brasileira e as diretrizes internacionais.',
+      comando:'Analise as afirmativas sobre leis e diretrizes. É correto o que se afirma em:',
+      afirmativas:['A Lei Brasileira de Inclusão (Lei nº 13.146/2015) trata do direito de acesso à informação para pessoas com deficiência.', 'A WCAG foi desenvolvida pelo W3C e se organiza nos princípios Perceptível, Operável, Compreensível e Robusto.', 'No Brasil, a maioria dos requisitos legais se baseia no nível AAA da WCAG.', 'O nível A é o mais completo da WCAG.'],
+      alternativas:{ a:'I e II, apenas.', b:'III e IV, apenas.', c:'I, II e III, apenas.', d:'II e IV, apenas.', e:'I, II, III e IV.' },
+      correta:'a', pagina:180, conceito:'LBI e WCAG',
+      explicacao:'I e II estão certas. No Brasil a base é o nível AA, e o nível A é o mínimo; o mais completo é o AAA.' },
+    { contexto:'O site de uma loja tem um banner de promoção com texto importante e algumas imagens só decorativas, como fundos e ícones de enfeite.',
+      comando:'Sobre o atributo alt, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'Todas as imagens, inclusive as decorativas, devem ter descrições longas.', b:'O alt serve apenas para melhorar a aparência da imagem.', c:'O banner deve ter alt descrevendo a promoção, e as imagens decorativas devem ter alt vazio (alt=""), para serem ignoradas por tecnologias assistivas.', d:'Imagens decorativas devem ficar sem o atributo alt e com aria-label obrigatório.', e:'O alt não tem relação com leitores de tela.' },
+      correta:'c', pagina:182, conceito:'alt e imagens decorativas',
+      explicacao:'O alt descreve a imagem para leitores de tela. Imagens decorativas usam alt="" para serem ignoradas.' },
+    { contexto:'Um designer escolheu texto cinza-claro sobre fundo branco e usou apenas vermelho e verde para indicar dados negativos e positivos em um gráfico.',
+      comando:'Com base nas recomendações sobre cores e contraste, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'A WCAG recomenda contraste mínimo de 4.5:1 para texto normal, e a cor não deve ser o único meio de transmitir informação.', b:'O contraste mínimo para texto normal é de 3:1 e para texto grande é de 4.5:1.', c:'Usar apenas vermelho e verde é o ideal para pessoas com daltonismo.', d:'O tamanho mínimo recomendado para o corpo do texto é 10px.', e:'Contraste baixo melhora a leitura em ambientes iluminados.' },
+      correta:'a', pagina:183, conceito:'contraste e uso da cor',
+      explicacao:'Texto normal pede 4.5:1 e texto grande 3:1. A cor deve vir junto de ícones ou texto, e o corpo do texto deve ter pelo menos 16px.' },
+    { contexto:'Um usuário com deficiência motora navega apenas pelo teclado. Ao abrir um modal de cadastro, o foco fica preso e ele não consegue sair. Além disso, os botões não mostram onde está o foco.',
+      comando:'Sobre navegação por teclado, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'Suprimir o estilo de foco deixa a interface mais acessível.', b:'tabindex com valor negativo coloca o elemento na ordem de tabulação.', c:'Armadilhas de foco são recomendadas em todos os modais.', d:'O foco deve ser visível e a tabulação deve seguir uma ordem lógica, evitando armadilhas de foco; tabindex="0" coloca o elemento na ordem natural do Tab.', e:'A navegação por teclado só interessa a usuários avançados.' },
+      correta:'d', pagina:185, conceito:'foco e tabindex',
+      explicacao:'Foco visível, ordem lógica e sem armadilhas. tabindex="0" entra na tabulação e valores negativos tiram o elemento dela.' },
+    { contexto:'A equipe rodou o Lighthouse, que deu boa pontuação de acessibilidade, e concluiu que não precisava fazer mais nenhum teste.',
+      comando:'Analise as afirmativas sobre testes de acessibilidade. É correto o que se afirma em:',
+      afirmativas:['Ferramentas automáticas não substituem os testes manuais.', 'Navegar pela interface usando apenas a tecla Tab é um teste manual simples.', 'Leitores de tela como NVDA e VoiceOver podem ser usados em testes manuais.', 'O WAVE destaca problemas com ícones sobre a própria página.'],
+      alternativas:{ a:'I, apenas.', b:'I e II, apenas.', c:'II e IV, apenas.', d:'III e IV, apenas.', e:'I, II, III e IV.' },
+      correta:'e', pagina:189, conceito:'ferramentas e testes manuais',
+      explicacao:'Todas estão certas. As ferramentas automáticas ajudam, mas testes manuais e com usuários reais encontram problemas que elas não detectam.' },
+    { contexto:'Um blog tem imagens sem alt, começa a página com um <h3> e usa vários links com o texto clique aqui. O dono reclama que o site aparece mal no Google.',
+      comando:'Sobre a relação entre acessibilidade e SEO, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'Acessibilidade e SEO não têm nenhuma relação.', b:'Links com o texto clique aqui melhoram a relevância nos buscadores.', c:'Começar a página com <h3> é a forma recomendada de organizar títulos.', d:'Imagens sem alt são mais bem indexadas pelo Google Imagens.', e:'Os robôs de busca leem o conteúdo de forma parecida com um leitor de tela, então títulos hierárquicos, alt nas imagens e links informativos melhoram o SEO.' },
+      correta:'e', pagina:190, conceito:'acessibilidade e SEO',
+      explicacao:'Robôs leem de forma sequencial e semântica. Alt, hierarquia de títulos a partir do h1 e links descritivos ajudam tanto a acessibilidade quanto o ranqueamento.' }
+  ]
+};
+
+D[9] = {
+  pistas: [
+    { conceito:'Portfólio e wireframe', pagina:202,
+      pergunta:'O que é um portfólio e o que é um wireframe?',
+      resposta:'Portfólio é uma página que apresenta habilidades, projetos e contato, uma vitrine digital. Wireframe é o rascunho da estrutura, que mostra onde cada conteúdo vai ficar; pode ser feito com papel e caneta (p. 203).',
+      pegadinha:'Dizer que o wireframe é o código final da página.' },
+    { conceito:'Papel de cada tecnologia no projeto', pagina:203,
+      pergunta:'Qual a função do HTML5, do Bootstrap e do JavaScript no portfólio?',
+      resposta:'HTML5 estrutura o conteúdo (seções, textos, imagens, formulários, links). Bootstrap cuida do visual: layout responsivo, componentes prontos e ícones, por classes CSS. JavaScript dá interatividade: captura eventos, mostra mensagens e cria o botão Voltar ao topo.',
+      pegadinha:'Dizer que o HTML5 captura eventos ou que o Bootstrap cuida da semântica.' },
+    { conceito:'One-page layout e links âncora', pagina:204,
+      pergunta:'O que é uma página única e como o menu leva até cada seção?',
+      resposta:'One-page layout reúne tudo em uma só página. O menu usa links âncora como href="#sobre", que levam a uma section com id="sobre" na mesma página, sem abrir outro arquivo (p. 206 e 209).',
+      pegadinha:'Dizer que href="#sobre" abre outro arquivo HTML chamado sobre.' },
+    { conceito:'Classes Bootstrap do cabeçalho', pagina:207,
+      pergunta:'O que fazem container, d-flex, flex-md-row, bg-dark e me-3?',
+      resposta:'container centraliza o conteúdo. d-flex ativa o flexbox (não cria espaçamento sozinho). flex-md-row coloca os itens em linha a partir de telas médias. bg-dark dá fundo escuro e text-white texto branco. me-3 é margem à direita, para espaçar os links.',
+      pegadinha:'Dizer que me-3 aumenta a borda ou que d-flex aplica espaçamento sozinho.' },
+    { conceito:'Grid, cards e formulário', pagina:209,
+      pergunta:'Como funcionam row, col-md-4, col-md-8 e o card?',
+      resposta:'row organiza em colunas; col-md-4 ocupa 4 das 12 partes em telas médias, col-md-8 ocupa 8. Nas telas pequenas tudo empilha. Card com h-100 (mesma altura) e shadow-sm (sombra leve) (p. 212). Campos com form-control e botão btn btn-primary (p. 214).',
+      pegadinha:'Dizer que o grid do Bootstrap tem 10 partes.' },
+    { conceito:'Botão Voltar ao topo e script', pagina:216,
+      pergunta:'Como o botão aparece e volta ao topo, e onde fica o script?',
+      resposta:'O botão começa oculto (display: none) e fica fixo no canto com position-fixed. O script escuta o scroll e mostra o botão depois de 300 pixels; no clique, window.scrollTo volta ao topo suavemente (p. 218). O script fica antes de </body>, depois que o conteúdo carregou.',
+      pegadinha:'Dizer que o HTML sozinho faz o botão aparecer ao rolar.' },
+    { conceito:'Alerta do formulário', pagina:219,
+      pergunta:'O que o script do formulário faz no envio?',
+      resposta:'Escuta o submit, usa preventDefault para não recarregar a página, lê os campos com getElementById().value, mostra um alert com os dados e limpa o formulário com this.reset() (p. 220).',
+      pegadinha:'Dizer que o formulário do exemplo envia os dados para um servidor de e-mail.' },
+    { conceito:'PWA', pagina:221,
+      pergunta:'O que é um PWA, quais os elementos principais e as vantagens?',
+      resposta:'Aplicação web com experiência de app nativo, sem instalar por loja. Elementos: manifest.json (nome, ícone, aparência) e service worker (cache e acesso off-line). Vantagens: instalação direta, funcionamento off-line, desempenho e integração com o sistema, como notificações (p. 222).',
+      pegadinha:'Dizer que o PWA precisa ser baixado de uma loja de aplicativos.' },
+    { conceito:'Publicação no GitHub Pages', pagina:223,
+      pergunta:'Quais os passos para publicar e como fica o link?',
+      resposta:'GitHub Pages hospeda grátis páginas estáticas. Crie o repositório, envie index.html e arquivos, vá em Settings > Pages, escolha a branch main (ou master) e a pasta root. O link fica seunome.github.io/nomedorepositorio. Cada novo commit atualiza o site.',
+      pegadinha:'Dizer que o GitHub Pages hospeda sites dinâmicos com banco de dados.' }
+  ],
+  livro: {
+    1: { paginas:[203], conceito:'papel de HTML5, Bootstrap e JavaScript',
+         explicacao:'O Bootstrap cuida do visual: facilita o layout responsivo e cria componentes reutilizáveis por meio de classes CSS. Atenção: no gabarito do livro, a explicação desta questão descreve a alternativa E por engano; a resposta certa é a D, como o próprio gabarito marca.' },
+    2: { paginas:[206], conceito:'links âncora internos' },
+    3: { paginas:[207], conceito:'classes do Bootstrap no cabeçalho' }
+  },
+  treino: [
+    { contexto:'Um estudante criou um portfólio de página única. No menu, colocou <a href="#projetos">Projetos</a> e, mais abaixo, <section id="projetos">.',
+      comando:'Sobre a navegação por links âncora, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O link abre um novo arquivo chamado projetos.html.', b:'O link só funciona se a seção estiver em outra página.', c:'O link leva o visitante diretamente à seção com id="projetos" na mesma página.', d:'O símbolo # indica que o link é externo.', e:'Links âncora exigem JavaScript obrigatório para funcionar.' },
+      correta:'c', pagina:206, conceito:'links âncora',
+      explicacao:'O href com # aponta para o id de uma seção na mesma página, permitindo navegar sem sair dela.' },
+    { contexto:'No portfólio do livro, a equipe usou HTML5, Bootstrap e JavaScript, cada um com uma responsabilidade específica.',
+      comando:'Analise as afirmativas. É correto o que se afirma em:',
+      afirmativas:['O HTML5 estrutura o conteúdo, como seções, formulários e links.', 'O Bootstrap oferece layout responsivo e componentes prontos por meio de classes CSS.', 'O JavaScript é usado para capturar eventos e criar o botão Voltar ao topo.', 'O Bootstrap é responsável por capturar o envio do formulário.'],
+      alternativas:{ a:'I, II e III, apenas.', b:'I e IV, apenas.', c:'II e IV, apenas.', d:'IV, apenas.', e:'I, II, III e IV.' },
+      correta:'a', pagina:203, conceito:'papel de cada tecnologia',
+      explicacao:'I, II e III estão certas. Quem captura o envio do formulário é o JavaScript, não o Bootstrap.' },
+    { contexto:'O cabeçalho do portfólio usa as classes container, d-flex, flex-column, flex-md-row e me-3. Um colega quer entender a função de cada uma antes de mexer no layout.',
+      comando:'Assinale a alternativa correta sobre essas classes do Bootstrap:', afirmativas:[],
+      alternativas:{ a:'A classe me-3 aumenta a espessura da borda dos links.', b:'A classe d-flex cria automaticamente espaçamento interno e externo entre os itens.', c:'A classe container faz os elementos ocuparem sempre a tela inteira, sem margens.', d:'A classe flex-md-row coloca os itens em linha a partir de telas médias, e me-3 aplica margem à direita.', e:'A classe flex-column coloca os itens em linha em qualquer tela.' },
+      correta:'d', pagina:207, conceito:'classes do Bootstrap',
+      explicacao:'flex-md-row deixa os itens em linha a partir de telas médias e me-3 é margem à direita. d-flex só ativa o flexbox, container centraliza e flex-column empilha em coluna.' },
+    { contexto:'Uma cafeteria quer que seu site possa ser adicionado à tela inicial do celular e continue mostrando o cardápio mesmo quando o cliente estiver sem internet.',
+      comando:'Sobre os Progressive Web Apps (PWA), assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O PWA precisa obrigatoriamente ser publicado em uma loja de aplicativos.', b:'O manifest.json define nome, ícone e aparência, e o service worker gerencia o cache, permitindo o funcionamento off-line.', c:'O service worker define apenas as cores do site.', d:'PWAs não funcionam sem conexão com a internet.', e:'PWAs não podem usar ícones personalizados nem notificações.' },
+      correta:'b', pagina:221, conceito:'manifest.json e service worker',
+      explicacao:'O manifest.json cuida de nome, ícone e aparência; o service worker gerencia o cache e o off-line. PWAs se instalam sem loja e podem enviar notificações.' },
+    { contexto:'Depois de terminar o portfólio, o estudante quer publicá-lo de graça usando o repositório que já criou no GitHub.',
+      comando:'Analise as afirmativas sobre o GitHub Pages. É correto o que se afirma em:',
+      afirmativas:['O GitHub Pages é um serviço gratuito que hospeda páginas estáticas.', 'A publicação é configurada em Settings, na seção Pages, escolhendo a branch principal.', 'Depois de publicado, cada novo commit atualiza o site automaticamente.'],
+      alternativas:{ a:'I, apenas.', b:'II, apenas.', c:'I e II, apenas.', d:'II e III, apenas.', e:'I, II e III.' },
+      correta:'e', pagina:223, conceito:'GitHub Pages',
+      explicacao:'As três estão certas. O link gerado segue o formato seunome.github.io/nomedorepositorio.' },
+    { contexto:'No formulário de contato do portfólio, ao clicar em Enviar, o visitante vê um alerta com os dados digitados e os campos ficam vazios, sem a página recarregar.',
+      comando:'Sobre o script do formulário, assinale a alternativa correta:', afirmativas:[],
+      alternativas:{ a:'O preventDefault impede o recarregamento da página, os valores são lidos com getElementById().value e o this.reset() limpa os campos.', b:'O formulário envia os dados automaticamente para um servidor de e-mail.', c:'O evento usado é o mouseover.', d:'O this.reset() envia os dados digitados.', e:'O script deve ficar dentro do <head>, antes do título.' },
+      correta:'a', pagina:220, conceito:'submit, preventDefault e reset',
+      explicacao:'O script escuta o submit, bloqueia o envio padrão, lê os campos, mostra o alerta e limpa com reset. O exemplo não está ligado a nenhum servidor e o script fica antes de </body>.' }
+  ]
+};
+
+/* ===== Marca-texto: app ===== */
+'use strict';
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $ = (s, el = document) => el.querySelector(s);
+const ROM = ['I','II','III','IV','V','VI'];
+
+const S = {
+  material: null, config: null, prog: null,
+  ia: null, iaPronto: false,
+  analise: {}, treino: {},
+  sel: {}, busy: {}, erros: {}, abertos: {},
+  sim: null, up: null, confirmar: null, emb: null
+};
+
+/* ---------- conteúdo pronto do livro (sem depender do Claude) ---------- */
+function reconhecerLivro(m){
+  if (!m || !m.formatoLivro || m.temas.length !== 9 || typeof D === 'undefined') return null;
+  const t = m.temas.map(x => x.titulo.toLowerCase());
+  return (t[0].includes('desenvolvimento web') && t[1].includes('html5') && t[2].includes('css3') && t[4].includes('dom') && t[8].includes('projeto')) ? D : null;
+}
+function aplicarDados(){ S.emb = reconhecerLivro(S.material); }
+const pistasDe = n => (S.emb && S.emb[n] && S.emb[n].pistas) || (S.analise[n] && S.analise[n].pistas) || [];
+const embTreinoCache = {};
+function embTreino(n){
+  if (!S.emb || !S.emb[n]) return [];
+  if (embTreinoCache[n]) return embTreinoCache[n];
+  const t = tema(n);
+  embTreinoCache[n] = (S.emb[n].treino || []).map((x, i) => {
+    const letras = ['a','b','c','d','e'].filter(l => x.alternativas[l]);
+    return { id:'emb-' + n + '-' + i, origem:'ia', tema:n, enunciado:x.contexto,
+      afirmativas:(x.afirmativas || []).map((s, j) => ({ n:ROM[j], t:s })),
+      comando:x.comando, alternativas:letras.map(l => ({ l, t:x.alternativas[l] })),
+      gab:{ correta:x.correta, explicacao:x.explicacao, paginas:x.pagina ? [x.pagina] : [], conceito:x.conceito || '', erradas:{}, afirmativas:{} } };
+  });
+  return embTreinoCache[n];
+}
+const treinoDe = n => embTreino(n).concat(S.treino[n] || []);
+
+/* ---------- armazenamento (IndexedDB com reserva em memória) ---------- */
+const idb = (() => {
+  let dbp = null; const mem = new Map();
+  function open(){
+    if (dbp) return dbp;
+    dbp = new Promise(res => {
+      try {
+        const r = indexedDB.open('marca-texto', 1);
+        r.onupgradeneeded = () => r.result.createObjectStore('kv');
+        r.onsuccess = () => res(r.result);
+        r.onerror = () => res(null);
+      } catch (e) { res(null); }
+    });
+    return dbp;
+  }
+  async function get(k){
+    const db = await open(); if (!db) return mem.get(k);
+    return new Promise(res => {
+      try { const q = db.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => res(q.result ?? mem.get(k)); q.onerror = () => res(mem.get(k)); }
+      catch (e) { res(mem.get(k)); }
+    });
+  }
+  async function set(k, v){
+    mem.set(k, v); const db = await open(); if (!db) return;
+    return new Promise(res => {
+      try { const tx = db.transaction('kv', 'readwrite'); tx.objectStore('kv').put(v, k); tx.oncomplete = () => res(); tx.onerror = () => res(); }
+      catch (e) { res(); }
+    });
+  }
+  async function clear(){
+    mem.clear(); const db = await open(); if (!db) return;
+    return new Promise(res => {
+      try { const tx = db.transaction('kv', 'readwrite'); tx.objectStore('kv').clear(); tx.oncomplete = () => res(); tx.onerror = () => res(); }
+      catch (e) { res(); }
+    });
+  }
+  return { get, set, clear };
+})();
+
+let salvarT = null;
+function salvarProg(){ clearTimeout(salvarT); salvarT = setTimeout(() => idb.set('progresso', S.prog), 250); agendarSync(); }
+
+/* ---------- sincronização entre aparelhos (GitHub Gist da própria conta) ---------- */
+const SYNC_ARQ = 'marca-texto-progresso.json';
+const SY = { token:'', gist:'', status:'', erro:'', ultima:'', ocupado:false, pendente:false, t:null };
+try { SY.token = localStorage.getItem('mt-token') || ''; SY.gist = localStorage.getItem('mt-gist') || ''; SY.ultima = localStorage.getItem('mt-ultima') || ''; } catch (e) {}
+function lsSet(k, v){ try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch (e) {} }
+
+function mesclarProg(a, b){
+  a = a || {}; b = b || {};
+  const out = { temas:{}, simulados:{}, usadas:[] };
+  const ta = a.temas || {}, tb = b.temas || {};
+  for (const n of new Set([...Object.keys(ta), ...Object.keys(tb)])){
+    const x = ta[n] || {}, y = tb[n] || {};
+    const ra = x.respostas || {}, rb = y.respostas || {}, resp = {};
+    for (const q of new Set([...Object.keys(ra), ...Object.keys(rb)])){
+      const u = ra[q], v = rb[q];
+      resp[q] = !u ? v : !v ? u : (u.fim && !v.fim) ? u : (v.fim && !u.fim) ? v : ((u.tentativas || []).length >= (v.tentativas || []).length ? u : v);
+    }
+    out.temas[n] = Object.assign({}, y, x, {
+      leuPerguntas: !!(x.leuPerguntas || y.leuPerguntas),
+      leuTema: !!(x.leuTema || y.leuTema),
+      achadas: [...new Set([...(x.achadas || []), ...(y.achadas || [])])],
+      treinoFeito: Math.max(x.treinoFeito || 0, y.treinoFeito || 0),
+      respostas: resp
+    });
+    const m = Math.max(x.mostrar || 0, y.mostrar || 0); if (m) out.temas[n].mostrar = m;
+  }
+  const sa = a.simulados || {}, sb = b.simulados || {};
+  for (const k of new Set([...Object.keys(sa), ...Object.keys(sb)])){
+    const u = sa[k], v = sb[k];
+    out.simulados[k] = !u ? v : !v ? u : ((u.quando || u.data || '') >= (v.quando || v.data || '') ? u : v);
+  }
+  out.usadas = [...new Set([...(a.usadas || []), ...(b.usadas || [])])];
+  return out;
+}
+function mesclarConfig(a, b){
+  if (!b) return a; if (!a) return b;
+  const base = (b.atualizado || 0) > (a.atualizado || 0) ? b : a;
+  const inis = [a.inicio, b.inicio].filter(Boolean).sort();
+  return Object.assign({}, base, { inicio: inis[0] || base.inicio });
+}
+
+async function gh(caminho, opcoes){
+  const r = await fetch('https://api.github.com' + caminho, Object.assign({ cache:'no-store' }, opcoes, {
+    headers: Object.assign({ 'Authorization':'Bearer ' + SY.token, 'Accept':'application/vnd.github+json' }, (opcoes && opcoes.body) ? { 'Content-Type':'application/json' } : {})
+  }));
+  if (r.status === 401) throw { tipo:'token' };
+  if (r.status === 404) throw { tipo:'404' };
+  if (!r.ok) throw { tipo:'http', status:r.status };
+  return r.json();
+}
+async function acharGist(){
+  if (SY.gist) return SY.gist;
+  for (let pag = 1; pag <= 5; pag++){
+    const lista = await gh('/gists?per_page=100&page=' + pag);
+    const g = lista.find(x => x.files && x.files[SYNC_ARQ]);
+    if (g){ SY.gist = g.id; lsSet('mt-gist', g.id); return g.id; }
+    if (lista.length < 100) break;
+  }
+  const novo = await gh('/gists', { method:'POST', body: JSON.stringify({ description:'Progresso do Marca-texto', public:false, files:{ [SYNC_ARQ]:{ content: JSON.stringify({ v:1, prog:S.prog, config:S.config }) } } }) });
+  SY.gist = novo.id; lsSet('mt-gist', novo.id); return novo.id;
+}
+async function sincronizar(){
+  if (!SY.token || !S.prog) return;
+  if (SY.ocupado){ SY.pendente = true; return; }
+  SY.ocupado = true; SY.erro = ''; SY.status = 'Sincronizando…'; atualizarSyncUI();
+  try {
+    let id = await acharGist(), g;
+    try { g = await gh('/gists/' + id); }
+    catch (e){ if (e.tipo === '404'){ SY.gist = ''; lsSet('mt-gist', ''); id = await acharGist(); g = await gh('/gists/' + id); } else throw e; }
+    const f = g.files && g.files[SYNC_ARQ];
+    let remoto = {};
+    if (f){
+      let txt = f.content;
+      if (f.truncated && f.raw_url){ const rr = await fetch(f.raw_url, { cache:'no-store' }); txt = await rr.text(); }
+      try { remoto = JSON.parse(txt || '{}'); } catch (e) { remoto = {}; }
+    }
+    const prog = mesclarProg(S.prog, remoto.prog);
+    const config = mesclarConfig(S.config, remoto.config);
+    const local = JSON.stringify({ p:S.prog, c:S.config });
+    const novo = JSON.stringify({ p:prog, c:config });
+    if (novo !== local){
+      S.prog = prog; S.config = config;
+      await idb.set('progresso', S.prog); await idb.set('config', S.config);
+      render();
+    }
+    if (novo !== JSON.stringify({ p:remoto.prog, c:remoto.config })){
+      await gh('/gists/' + id, { method:'PATCH', body: JSON.stringify({ files:{ [SYNC_ARQ]:{ content: JSON.stringify({ v:1, prog, config }) } } }) });
+    }
+    SY.ultima = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) + ' de ' + fmtCurto(new Date());
+    lsSet('mt-ultima', SY.ultima); SY.status = '';
+  } catch (e){
+    SY.status = '';
+    SY.erro = e && e.tipo === 'token' ? 'O token não funcionou ou expirou. Crie um novo no GitHub e conecte de novo.'
+      : (navigator.onLine === false || (e && e.name === 'TypeError')) ? 'Sem internet agora. O progresso sincroniza quando a conexão voltar.'
+      : 'Não consegui sincronizar agora. Tente de novo em alguns minutos.';
+  } finally {
+    SY.ocupado = false; atualizarSyncUI();
+    if (SY.pendente){ SY.pendente = false; agendarSync(1500); }
+  }
+}
+function agendarSync(ms){ if (!SY.token) return; clearTimeout(SY.t); SY.t = setTimeout(sincronizar, ms == null ? 4000 : ms); }
+function atualizarSyncUI(){ const el = document.getElementById('sync-box'); if (el) el.innerHTML = syncCorpo(); const ind = document.getElementById('sync-ind'); if (ind) ind.outerHTML = syncIndicador(); }
+function syncIndicador(){
+  if (!SY.token) return '<span id="sync-ind"></span>';
+  const txt = SY.status ? 'Sincronizando' : SY.erro ? 'Sem sincronizar' : 'Sincronizado';
+  return '<a id="sync-ind" class="sync-ind' + (SY.erro ? ' erro' : '') + '" href="#ajustes">' + txt + '</a>';
+}
+function syncCorpo(){
+  if (SY.token){
+    let h = '<p>' + (SY.status ? esc(SY.status) : SY.ultima ? 'Conectado. Última sincronização: ' + esc(SY.ultima) + '.' : 'Conectado.') + '</p>';
+    if (SY.erro) h += '<p class="aviso erro" role="alert">' + esc(SY.erro) + '</p>';
+    h += '<div class="linha"><button type="button" class="btn" data-act="sync-agora"' + (SY.ocupado ? ' disabled' : '') + '>Sincronizar agora</button><button type="button" class="btn-sec" data-act="sync-sair">Desconectar</button></div>';
+    h += '<p class="nota">O progresso sincroniza sozinho ao abrir o app e depois de cada resposta. Em cada aparelho, envie o PDF uma vez: o progresso vem junto.</p>';
+    return h;
+  }
+  let h = '<p>O progresso fica salvo em cada aparelho. Para o celular e o PC ficarem iguais, conecte a sua conta do GitHub (a mesma do site). Faça isso uma vez em cada aparelho.</p>';
+  h += '<ol class="passos"><li><a href="https://github.com/settings/tokens/new?scopes=gist&description=Marca-texto" target="_blank" rel="noopener">Criar o token no GitHub</a>. A permissão <strong>gist</strong> já vem marcada.</li><li>Em <strong>Expiration</strong>, escolha <strong>No expiration</strong>. Toque em <strong>Generate token</strong> e copie o código.</li><li>Cole aqui e toque em Conectar. No outro aparelho, cole o mesmo código.</li></ol>';
+  if (SY.erro) h += '<p class="aviso erro" role="alert">' + esc(SY.erro) + '</p>';
+  h += '<label for="sync-token">Token do GitHub</label><input type="password" id="sync-token" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ghp_…"><button type="button" class="btn" data-act="sync-conectar">Conectar</button>';
+  h += '<p class="nota">O token fica salvo só neste aparelho e só dá acesso aos seus gists. Não envie esse código para ninguém, nem em conversas.</p>';
+  return h;
+}
+
+
+/* ---------- datas ---------- */
+const iso = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+const hojeISO = () => iso(new Date());
+const parseD = s => { const [y,m,d] = String(s).split('-').map(Number); return new Date(y, (m||1)-1, d||1); };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const diffDays = (a, b) => Math.round((parseD(iso(b)) - parseD(iso(a))) / 86400000);
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const fmtLongo = d => cap(d.toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' }));
+const mesCurto = d => d.toLocaleDateString('pt-BR', { month:'short' }).replace('.', '');
+const fmtCurto = d => d.getDate() + ' ' + mesCurto(d);
+const fmtFaixa = (a, b) => iso(a) === iso(b) ? fmtCurto(a) : (a.getMonth() === b.getMonth() ? a.getDate() + ' e ' + b.getDate() + ' ' + mesCurto(b) : fmtCurto(a) + ' a ' + fmtCurto(b));
+
+/* ---------- utilidades de domínio ---------- */
+const tema = n => S.material.temas.find(t => t.n === n);
+function pt(n){
+  S.prog.temas[n] = S.prog.temas[n] || { leuPerguntas:false, leuTema:false, achadas:[], respostas:{}, treinoFeito:0 };
+  return S.prog.temas[n];
+}
+function concluido(t){
+  const p = pt(t.n);
+  return t.questoes.length ? t.questoes.every(q => p.respostas[q.id]?.fim) : p.leuTema;
+}
+function etapas(t){
+  const p = pt(t.n), temQ = t.questoes.length > 0;
+  const lista = [];
+  if (temQ) lista.push({ id:'perguntas', nome:'Leia as perguntas antes', feito:p.leuPerguntas });
+  lista.push({ id:'leitura', nome:'Leia o livro procurando isto', feito:p.leuTema });
+  if (temQ) lista.push({ id:'responder', nome:'Responda sem consultar', feito:concluido(t) });
+  lista.push({ id:'treino', nome:'Treine no estilo da prova', feito:(p.treinoFeito||0) > 0 });
+  return lista;
+}
+const acertosPrimeira = t => t.questoes.filter(q => pt(t.n).respostas[q.id]?.primeira).length;
+function shuffle(a){ a = a.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const fita = ps => { ps = (ps || []).filter(Boolean); if (!ps.length) return ''; return '<span class="fita">p. ' + ps.map(esc).join(' e ') + '</span>'; };
+
+function plano(){
+  const temas = S.material.temas, T = temas.length;
+  const ini = parseD(S.config.inicio);
+  const fimEstudo = addDays(parseD(S.config.dataProva), -2);
+  let D = diffDays(ini, fimEstudo) + 1; if (D < 1) D = 1;
+  return temas.map((t, k) => {
+    const a = Math.floor(k * D / T), b = Math.max(a, Math.floor((k + 1) * D / T) - 1);
+    return { n:t.n, ini:addDays(ini, a), fim:addDays(ini, b) };
+  });
+}
+
+function avaliacoes(){
+  const m = S.material, l = [];
+  const doU = u => m.temas.filter(t => t.unidade === u).map(t => t.n);
+  if (m.formatoLivro && doU(1).length) l.push({ id:'av1', nome:'Avaliação 1', desc:'Unidade 1', temas:doU(1), sim:true });
+  if (m.formatoLivro && doU(2).length) l.push({ id:'av2', nome:'Avaliação 2', desc:'Unidade 2', temas:doU(2), sim:true });
+  if (m.formatoLivro) l.push({ id:'av3', nome:'Avaliação 3', desc:'Trabalho com o template padrão da Uniasselvi', temas:[], sim:false });
+  l.push({ id:'av4', nome: m.formatoLivro ? 'Avaliação 4' : 'Simulado geral', desc:'Prova final com 10 questões de todas as unidades', temas:m.temas.map(t => t.n), sim:true });
+  return l;
+}
+function intervaloTemas(ns){
+  if (!ns.length) return '';
+  return ns.length === 1 ? 'Tema ' + ns[0] : 'Temas ' + ns[0] + ' a ' + ns[ns.length - 1];
+}
+function caiEm(t){
+  if (!S.material.formatoLivro) return '';
+  if (t.unidade === 1) return 'Cai na Avaliação 1 e na Avaliação 4.';
+  if (t.unidade === 2) return 'Cai na Avaliação 2 e na Avaliação 4.';
+  return 'Cai na Avaliação 4.';
+}
+
+/* ---------- Claude (sample) ---------- */
+async function iniciarIA(){
+  try { S.ia = (window.claude && typeof window.claude.use === 'function') ? await window.claude.use('sample') : null; }
+  catch (e) { S.ia = null; }
+  S.iaPronto = true; render();
+}
+const DESLIGA = ['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'];
+function msgErro(e){
+  const c = e && e.code;
+  if (c === 'sem_ia' || DESLIGA.includes(c)) return 'O Claude não está liberado nesta página. Abra o Marca-texto pelo link do Claude, com sua conta conectada.';
+  if (c === 'rate_limited') return 'Muitos pedidos seguidos ao Claude. Espere alguns minutos e tente de novo.';
+  if (c === 'session_expired') return 'Sua sessão do Claude expirou. Entre de novo na sua conta e tente outra vez.';
+  if (c === 'prompt_too_large') return 'Este tema é grande demais para analisar de uma vez.';
+  if (c === 'refused') return 'O Claude não conseguiu analisar este trecho. Tente de novo mais tarde.';
+  return 'A resposta do Claude veio incompleta. Tente de novo.';
+}
+function tratarErroIA(e){ if (e && DESLIGA.includes(e.code)) S.ia = null; }
+
+function questaoTexto(q){
+  let s = q.numero + '. ' + q.enunciado + '\n';
+  q.afirmativas.forEach(a => { s += a.n + ' - ' + a.t + '\n'; });
+  if (q.comando) s += q.comando + '\n';
+  q.alternativas.forEach(a => { s += a.l + ') ' + a.t + '\n'; });
+  return s;
+}
+function clampPag(p, t){ p = parseInt(p, 10); if (!p || p < t.pIni || p > t.pFim) return null; return p; }
+
+function promptAnalise(t, texto){
+  const temQ = t.questoes.length > 0;
+  return [
+    'Você é professor de uma disciplina de graduação EAD e prepara um aluno iniciante para estudar PELO LIVRO. As provas são de múltipla escolha, com um parágrafo de contexto e alternativas com pegadinhas.',
+    'Abaixo está o texto do Tema ' + t.n + ' ("' + t.titulo + '"), com marcadores [pág N] indicando a página do livro' + (temQ ? ', e as autoatividades do fim do tema.' : '.'),
+    '',
+    'Tarefa:',
+    '1) "pistas": de 6 a 8 pontos que mais caem em prova neste tema. Priorize o que as autoatividades cobram, definições, diferenças entre conceitos parecidos, funções de cada tecnologia e listas ou etapas. Para cada ponto: "conceito" (até 6 palavras), "pagina" (número de um marcador [pág N] onde o livro explica), "pergunta" (pergunta-guia curta que o aluno responde depois de ler essa página), "resposta" (1 a 2 frases fiéis ao livro) e "pegadinha" (1 frase: como a prova costuma distorcer esse ponto).',
+    temQ ? '2) "gabarito": para cada autoatividade, "numero", a letra "correta" segundo o livro, "paginas" (números dos marcadores que fundamentam), "conceito" cobrado, "explicacao" curta (2 a 3 frases) e "erradas": um objeto com o motivo de cada alternativa errada em 1 frase. Nas questões com afirmativas (I, II, III...), inclua "afirmativas": objeto como {"I": "Verdadeira: motivo", "II": "Falsa: motivo"}.' : '2) "gabarito": deixe como lista vazia.',
+    '',
+    'Responda SOMENTE com JSON válido, sem markdown, neste formato:',
+    '{"pistas":[{"conceito":"","pagina":0,"pergunta":"","resposta":"","pegadinha":""}],"gabarito":[{"numero":1,"correta":"a","paginas":[0],"conceito":"","explicacao":"","erradas":{"b":""},"afirmativas":{}}]}',
+    'Use português do Brasil e linguagem simples. Baseie-se apenas no texto do livro.',
+    '',
+    temQ ? 'AUTOATIVIDADES:\n' + t.questoes.map(questaoTexto).join('\n') : '',
+    'TEXTO DO TEMA:',
+    texto
+  ].join('\n');
+}
+
+function promptTreino(t, texto, k, evitar){
+  return [
+    'Você elabora questões de prova de múltipla escolha no estilo das avaliações da Uniasselvi.',
+    'Crie ' + k + ' questões NOVAS sobre o Tema ' + t.n + ' ("' + t.titulo + '"), usando SOMENTE o conteúdo do livro abaixo (marcadores [pág N] indicam as páginas).',
+    'Estilo obrigatório:',
+    '- "contexto": um parágrafo de 2 a 4 frases que contextualiza (uma situação de trabalho, um estudante criando um site, uma empresa, um cenário do dia a dia).',
+    '- "comando": a frase que pede a resposta, como "Com base no texto, assinale a alternativa correta:".',
+    '- Cerca de metade das questões no formato de afirmativas: "afirmativas" com 3 ou 4 frases (sem numeração), comando "É correto o que se afirma em:" e alternativas que combinam os números romanos (ex.: "I e III, apenas."). Nas outras, "afirmativas" é uma lista vazia.',
+    '- 5 alternativas (a até e), só uma correta. Varie a letra correta entre as questões.',
+    '- Alternativas erradas com as pegadinhas comuns: papéis trocados entre conceitos, palavras absolutas (apenas, sempre, nunca, exclusivamente), ordem ou época trocada, função de uma tecnologia atribuída a outra.',
+    '- "explicacao": 2 a 3 frases dizendo por que a correta está certa e onde as outras erram.',
+    '- "pagina": número de um marcador [pág N] onde o livro explica o assunto. "conceito": até 6 palavras.',
+    evitar.length ? 'Não repita estes assuntos já cobrados: ' + evitar.join('; ') + '.' : '',
+    'Responda SOMENTE com um array JSON, sem markdown:',
+    '[{"contexto":"","comando":"","afirmativas":[],"alternativas":{"a":"","b":"","c":"","d":"","e":""},"correta":"a","explicacao":"","pagina":0,"conceito":""}]',
+    '',
+    'TEXTO DO TEMA:',
+    texto
+  ].join('\n');
+}
+
+function normAnalise(r, t){
+  const pistas = (Array.isArray(r && r.pistas) ? r.pistas : []).map(x => ({
+    conceito: String(x.conceito || '').trim(), pagina: clampPag(x.pagina, t),
+    pergunta: String(x.pergunta || '').trim(), resposta: String(x.resposta || '').trim(),
+    pegadinha: String(x.pegadinha || '').trim()
+  })).filter(x => x.conceito && x.pergunta);
+  pistas.sort((a, b) => (a.pagina || 9999) - (b.pagina || 9999));
+  const gabarito = {};
+  for (const g of (Array.isArray(r && r.gabarito) ? r.gabarito : [])){
+    const num = parseInt(g.numero, 10);
+    const c = String(g.correta || '').trim().toLowerCase().charAt(0);
+    if (!num || !c || !'abcde'.includes(c)) continue;
+    const pags = Array.isArray(g.paginas) ? g.paginas : [g.paginas];
+    gabarito[num] = {
+      correta: c, explicacao: String(g.explicacao || ''),
+      paginas: [...new Set(pags.map(p => clampPag(p, t)).filter(Boolean))],
+      conceito: String(g.conceito || ''),
+      erradas: (g.erradas && typeof g.erradas === 'object') ? g.erradas : {},
+      afirmativas: (g.afirmativas && typeof g.afirmativas === 'object') ? g.afirmativas : {}
+    };
+  }
+  if (!pistas.length && !Object.keys(gabarito).length) throw { code:'invalid_json' };
+  return { pistas, gabarito };
+}
+
+function normTreino(arr, t){
+  if (!Array.isArray(arr)) arr = arr && arr.questoes;
+  if (!Array.isArray(arr)) throw { code:'invalid_json' };
+  const stamp = Date.now().toString(36);
+  const out = arr.map((x, i) => {
+    const alts = (x && x.alternativas) || {};
+    const letras = ['a','b','c','d','e'].filter(l => typeof alts[l] === 'string' && alts[l].trim());
+    const correta = String(x.correta || '').trim().toLowerCase().charAt(0);
+    if (letras.length < 4 || !letras.includes(correta)) return null;
+    const af = Array.isArray(x.afirmativas) ? x.afirmativas.filter(s => typeof s === 'string' && s.trim()) : [];
+    const pag = clampPag(x.pagina, t);
+    return {
+      id: 'ia-' + stamp + '-' + i, origem:'ia', tema:t.n,
+      enunciado: String(x.contexto || '').trim(),
+      afirmativas: af.map((s, j) => ({ n:ROM[j], t:s.replace(/^\s*(I|II|III|IV|V|VI)\s*[-–—.)]\s*/, '').trim() })),
+      comando: String(x.comando || (af.length ? 'É correto o que se afirma em:' : 'Assinale a alternativa correta:')).trim(),
+      alternativas: letras.map(l => ({ l, t:alts[l].trim().replace(/^[a-e]\)\s*/, '') })),
+      gab: { correta, explicacao:String(x.explicacao || ''), paginas: pag ? [pag] : [], conceito:String(x.conceito || ''), erradas:{}, afirmativas:{} }
+    };
+  }).filter(Boolean);
+  if (!out.length) throw { code:'invalid_json' };
+  return out;
+}
+
+async function analisarTema(n){
+  if (S.analise[n]) return S.analise[n];
+  if (!S.ia) throw { code:'sem_ia' };
+  const t = tema(n);
+  const ctl = new AbortController(); S.busy['a' + n] = ctl; render();
+  try {
+    const r = await S.ia.json(promptAnalise(t, textoTema(S.material.pages, t, 70000)), { signal:ctl.signal, modelTier:'default' });
+    const a = normAnalise(r, t);
+    S.analise[n] = a; await idb.set('ia:analise:' + n, a);
+    return a;
+  } catch (e) { tratarErroIA(e); throw e; }
+  finally { delete S.busy['a' + n]; render(); }
+}
+
+async function gerarTreino(n, k, signal){
+  if (!S.ia) throw { code:'sem_ia' };
+  const t = tema(n), atual = S.treino[n] || [];
+  const evitar = [...atual.map(q => q.gab.conceito), ...t.questoes.map(q => (S.analise[n] && S.analise[n].gabarito[q.numero] || {}).conceito)].filter(Boolean).slice(-20);
+  try {
+    const r = await S.ia.json(promptTreino(t, textoTema(S.material.pages, t, 70000), k, evitar), { signal, modelTier:'default', cache:false });
+    const qs = normTreino(r, t);
+    S.treino[n] = atual.concat(qs); await idb.set('ia:treino:' + n, S.treino[n]);
+    return qs;
+  } catch (e) { tratarErroIA(e); throw e; }
+}
+
+function gabDe(q, n){
+  if (q.origem === 'ia') return q.gab;
+  const t = tema(n);
+  const doLivro = t.gabarito && t.gabarito[q.numero];
+  if (doLivro){
+    const ref = (S.emb && S.emb[n] && S.emb[n].livro && S.emb[n].livro[q.numero]) || {};
+    const ia = S.analise[n] && S.analise[n].gabarito[q.numero];
+    return Object.assign({}, doLivro, {
+      paginas: ref.paginas || (ia && ia.paginas && ia.paginas.length ? ia.paginas : paginasProvaveis(S.material.pages, t, q).slice(0, 2)),
+      conceito: ref.conceito || (ia && ia.conceito) || '',
+      explicacao: ref.explicacao || doLivro.explicacao || (ia && ia.explicacao) || ''
+    });
+  }
+  const a = S.analise[n]; return a ? (a.gabarito[q.numero] || null) : null;
+}
+
+/* ---------- ações ---------- */
+function achar(key){
+  const [ns, ...rest] = key.split('|'); const n = +ns, id = rest.join('|');
+  const t = tema(n);
+  const q = t.questoes.find(x => x.id === id) || treinoDe(n).find(x => x.id === id);
+  return { n, q };
+}
+
+async function conferir(key){
+  const { n, q } = achar(key); const sel = S.sel[key];
+  if (!q || !sel) return;
+  delete S.erros[key];
+  let g = gabDe(q, n);
+  if (!g){
+    if (!S.ia){ S.erros[key] = msgErro({ code:'sem_ia' }); render(); return; }
+    S.busy[key] = true; render();
+    try { await analisarTema(n); }
+    catch (e){ delete S.busy[key]; if (e.code !== 'cancelled') S.erros[key] = msgErro(e); render(); return; }
+    delete S.busy[key];
+    g = gabDe(q, n);
+    if (!g){ S.erros[key] = 'Não encontrei o gabarito desta questão. Toque em Conferir de novo.'; delete S.analise[n]; render(); return; }
+  }
+  const p = pt(n);
+  const r = p.respostas[q.id] = p.respostas[q.id] || { tentativas:[], fim:false, primeira:false };
+  if (r.fim) return;
+  r.tentativas.push(sel); delete S.sel[key];
+  if (sel === g.correta){ r.fim = true; r.primeira = r.tentativas.length === 1; }
+  else if (r.tentativas.length >= 2) r.fim = true;
+  if (r.fim && q.origem === 'ia') p.treinoFeito = (p.treinoFeito || 0) + 1;
+  salvarProg(); render();
+}
+
+function marcarEtapa(n, id){
+  const p = pt(n);
+  if (id === 'perguntas') p.leuPerguntas = true;
+  if (id === 'leitura') p.leuTema = true;
+  salvarProg();
+  const lista = etapas(tema(n));
+  const i = lista.findIndex(e => e.id === id);
+  S.abertos[n + ':' + id] = false;
+  if (lista[i + 1]) S.abertos[n + ':' + lista[i + 1].id] = true;
+  render();
+  if (lista[i + 1]) requestAnimationFrame(() => { const el = document.getElementById('et-' + lista[i + 1].id); if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start' }); });
+}
+
+async function pedirPistas(n){
+  delete S.erros['pistas' + n];
+  try { await analisarTema(n); } catch (e){ if (e.code !== 'cancelled') S.erros['pistas' + n] = msgErro(e); render(); }
+}
+
+async function pedirTreino(n){
+  delete S.erros['treino' + n];
+  const ctl = new AbortController(); S.busy['t' + n] = ctl; render();
+  try { await gerarTreino(n, 5, ctl.signal); }
+  catch (e){ if (e.code !== 'cancelled') S.erros['treino' + n] = msgErro(e); }
+  finally { delete S.busy['t' + n]; render(); }
+}
+
+/* simulado */
+function novasDo(n){
+  const usadas = new Set(S.prog.usadas || []), p = pt(n);
+  return treinoDe(n).filter(q => !usadas.has(q.id) && !p.respostas[q.id]);
+}
+function livroDo(n){ return tema(n).questoes.filter(q => gabDe(q, n)); }
+
+async function iniciarSimulado(id){
+  const av = avaliacoes().find(a => a.id === id); if (!av) return;
+  const alvo = 10, porTema = Math.max(1, Math.ceil(alvo / av.temas.length));
+  const precisa = av.temas.filter(n => novasDo(n).length < porTema);
+  location.hash = '#simulado';
+  if (precisa.length && S.ia){
+    const ctl = new AbortController();
+    S.sim = { id, fase:'preparando', passo:0, total:precisa.length, ctl, msg:'' };
+    for (const n of precisa){
+      if (ctl.signal.aborted) break;
+      S.sim.passo++; S.sim.msg = 'Preparando questões do Tema ' + n + ' (' + S.sim.passo + ' de ' + S.sim.total + ')'; render();
+      try { await gerarTreino(n, Math.max(2, porTema - novasDo(n).length + 1), ctl.signal); }
+      catch (e){
+        if (e.code === 'cancelled') break;
+        S.sim = { id, fase:'erro', msg:msgErro(e) }; render(); return;
+      }
+    }
+    if (ctl.signal.aborted){ S.sim = null; location.hash = '#simulados'; render(); return; }
+  }
+  let qs = [];
+  for (const n of av.temas){
+    const lista = [...shuffle(novasDo(n)), ...shuffle(livroDo(n)), ...shuffle(treinoDe(n))];
+    const vistos = new Set();
+    qs.push(...lista.filter(q => !vistos.has(q.id) && vistos.add(q.id)).slice(0, porTema).map(q => ({ q, n })));
+  }
+  qs = shuffle(qs).slice(0, alvo);
+  if (qs.length < 3){
+    S.sim = { id, fase:'erro', msg: S.ia ? 'Ainda não há questões suficientes. Tente de novo.' : 'Para montar o simulado, o Marca-texto precisa do Claude. Abra esta página pelo link do Claude, com sua conta conectada.' };
+    render(); return;
+  }
+  S.sim = { id, fase:'prova', qs, resp:{}, i:0 };
+  render(); window.scrollTo(0, 0);
+}
+
+function entregar(){
+  const s = S.sim; let acertos = 0;
+  s.qs.forEach((x, i) => { const g = gabDe(x.q, x.n); x.ok = !!(g && s.resp[i] === g.correta); if (x.ok) acertos++; });
+  s.fase = 'resultado'; s.acertos = acertos;
+  S.prog.simulados[s.id] = { acertos, total:s.qs.length, data:hojeISO(), quando:new Date().toISOString() };
+  S.prog.usadas = [...new Set([...(S.prog.usadas || []), ...s.qs.filter(x => x.q.origem === 'ia').map(x => x.q.id)])];
+  salvarProg(); render(); window.scrollTo(0, 0);
+}
+
+/* PDF */
+const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+function carregarScript(src){
+  return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('script')); document.head.appendChild(s); });
+}
+async function garantirPdfjs(){
+  if (window.pdfjsLib) return window.pdfjsLib;
+  await carregarScript(PDFJS + 'pdf.worker.min.js');
+  await carregarScript(PDFJS + 'pdf.min.js');
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js';
+  return window.pdfjsLib;
+}
+function itemsToText(items){
+  let out = '';
+  for (const it of items){ if (it.str === undefined) continue; out += it.str; if (it.hasEOL) out += '\n'; }
+  return out;
+}
+function progressoLeitura(){
+  const b = $('#barra-leitura'), t = $('#txt-leitura');
+  if (!b || !S.up) return;
+  const pct = S.up.total ? Math.round(100 * S.up.atual / S.up.total) : 3;
+  b.style.width = pct + '%';
+  t.textContent = S.up.total ? 'Lendo a página ' + S.up.atual + ' de ' + S.up.total : 'Abrindo o PDF';
+}
+async function lerPdf(file){
+  if (!file) return;
+  S.up = { fase:'lendo', atual:0, total:0 }; render();
+  try {
+    const lib = await garantirPdfjs();
+    const buf = await file.arrayBuffer();
+    const doc = await lib.getDocument({ data:new Uint8Array(buf), isEvalSupported:false, disableFontFace:true }).promise;
+    S.up.total = doc.numPages; progressoLeitura();
+    const pages = [];
+    for (let i = 1; i <= doc.numPages; i++){
+      const pg = await doc.getPage(i);
+      const tc = await pg.getTextContent();
+      pages.push(itemsToText(tc.items)); pg.cleanup();
+      if (i % 3 === 0 || i === doc.numPages){ S.up.atual = i; progressoLeitura(); await new Promise(r => setTimeout(r, 0)); }
+    }
+    if (pages.join('').replace(/\s/g, '').length < 300) throw new Error('sem-texto');
+    const est = buildStructure(pages, file.name);
+    S.material = Object.assign({}, est, { pages });
+    S.config = Object.assign({}, S.config, { inicio:hojeISO() });
+    S.analise = {}; S.treino = {}; S.sel = {}; S.erros = {}; S.abertos = {}; S.sim = null;
+    S.prog = { temas:{}, simulados:{}, usadas:[] };
+    aplicarDados();
+    await idb.clear();
+    await idb.set('material', S.material); await idb.set('config', S.config); await idb.set('progresso', S.prog);
+    S.up = null; location.hash = '#hoje'; render(); window.scrollTo(0, 0); agendarSync(300);
+  } catch (e){
+    const m = e && e.message;
+    S.up = { fase:'erro', msg: m === 'sem-texto' ? 'Este PDF não tem texto selecionável (parece digitalizado como imagem). Use o PDF digital da matéria.'
+      : m === 'script' ? 'Não consegui carregar o leitor de PDF. Confira sua internet e tente de novo.'
+      : 'Não consegui ler este PDF. Confira se é o arquivo da matéria e tente de novo.' };
+    render();
+  }
+}
+
+/* ---------- componentes ---------- */
+const ICON = {
+  hoje:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8.5 14.5l2 2 4-4"/></svg>',
+  temas:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c3-1.3 6-1.3 9 .8 3-2.1 6-2.1 9-.8v13c-3-1.3-6-1.3-9 .8-3-2.1-6-2.1-9-.8z"/><path d="M12 6.3v13"/></svg>',
+  sim:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 10h7M8.5 14h4.5"/><path d="M14 17.2l1.4 1.4 2.6-2.7"/></svg>',
+  ajustes:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  voltar:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+  check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+};
+
+function segmentos(t){
+  const l = etapas(t);
+  return '<span class="segs" aria-label="' + l.filter(e => e.feito).length + ' de ' + l.length + ' etapas feitas">' +
+    l.map(e => '<i class="' + (e.feito ? 'on' : '') + '"></i>').join('') + '</span>';
+}
+
+function paragrafos(s){ return String(s || '').split('\n').filter(x => x.trim()).map(x => '<p>' + esc(x) + '</p>').join(''); }
+
+function qCard(q, o){
+  // o: {key, modo:'leitura'|'pratica'|'prova'|'revisao', rotulo, n, sel, estado, gab}
+  const modo = o.modo;
+  let h = '<article class="q q-' + modo + '" id="' + (modo === 'leitura' ? 'ql-' : 'q-') + esc(o.key || q.id) + '">';
+  if (o.rotulo) h += '<p class="q-rot">' + esc(o.rotulo) + '</p>';
+  h += '<div class="q-txt">' + paragrafos(q.enunciado) + '</div>';
+  if (q.afirmativas.length){
+    h += '<ol class="afirm">' + q.afirmativas.map(a => {
+      let extra = '';
+      if (o.gab && (o.estado && o.estado.fim || modo === 'revisao') && o.gab.afirmativas && o.gab.afirmativas[a.n]) extra = '<span class="afirm-vf">' + esc(o.gab.afirmativas[a.n]) + '</span>';
+      return '<li><b>' + esc(a.n) + '</b><span>' + esc(a.t) + extra + '</span></li>';
+    }).join('') + '</ol>';
+  }
+  if (q.comando) h += '<p class="q-cmd">' + esc(q.comando) + '</p>';
+
+  const est = o.estado || { tentativas:[], fim:false };
+  const g = o.gab;
+  const mostrarGab = (modo === 'pratica' && est.fim && g) || (modo === 'revisao' && g);
+  if (modo === 'leitura'){
+    h += '<ul class="alts-lista">' + q.alternativas.map(a => '<li><b>' + a.l + ')</b> ' + esc(a.t) + '</li>').join('') + '</ul>';
+  } else {
+    h += '<div class="alts" role="radiogroup" aria-label="Alternativas">';
+    for (const a of q.alternativas){
+      let cls = 'alt', dis = false, marca = '';
+      if (modo === 'pratica'){
+        if (est.tentativas.includes(a.l) && (!g || a.l !== g.correta)){ cls += ' riscada'; dis = true; marca = '<span class="alt-tag">Sua resposta</span>'; }
+        if (mostrarGab && a.l === g.correta){ cls += ' certa'; marca = '<span class="alt-tag">Correta</span>'; }
+        if (est.fim) dis = true;
+      }
+      if (modo === 'revisao'){
+        dis = true;
+        if (g && a.l === g.correta){ cls += ' certa'; marca = '<span class="alt-tag">Correta</span>'; }
+        else if (o.sel === a.l){ cls += ' riscada'; marca = '<span class="alt-tag">Sua resposta</span>'; }
+      }
+      const marcado = o.sel === a.l && modo !== 'revisao';
+      if (marcado) cls += ' sel';
+      const act = modo === 'prova' ? 'sim-escolher' : 'escolher';
+      h += '<button type="button" role="radio" aria-checked="' + marcado + '" class="' + cls + '"' + (dis ? ' disabled' : '') +
+        ' data-act="' + act + '" data-k="' + esc(o.key || '') + '" data-l="' + a.l + '"><span class="alt-l">' + a.l + '</span><span class="alt-t">' + esc(a.t) + marca + '</span></button>';
+    }
+    h += '</div>';
+  }
+
+  if (modo === 'pratica'){
+    const k = o.key;
+    if (S.erros[k]) h += '<p class="aviso erro" role="alert">' + esc(S.erros[k]) + '</p>';
+    if (!est.fim && est.tentativas.length === 1 && g){
+      h += '<div class="aviso dica" role="status"><p><strong>Ainda não.</strong> Releia ' + (g.paginas.length ? 'a ' + fita(g.paginas) : 'o trecho do livro') + (g.conceito ? ' sobre <strong>' + esc(g.conceito) + '</strong>' : '') + ' e tente de novo.</p></div>';
+    }
+    if (mostrarGab) h += explicacao(q, g, est);
+    if (!est.fim){
+      const busy = !!S.busy[k];
+      h += '<div class="q-acoes"><button type="button" class="btn" data-act="conferir" data-k="' + esc(k) + '"' + ((!o.sel || busy) ? ' disabled' : '') + '>' + (busy ? 'Conferindo com o livro…' : 'Conferir') + '</button></div>';
+    }
+  }
+  if (modo === 'revisao' && g) h += explicacao(q, g, { tentativas: o.sel ? [o.sel] : [], fim:true, revisao:true, sel:o.sel });
+  h += '</article>';
+  return h;
+}
+
+function explicacao(q, g, est){
+  let titulo;
+  if (est.revisao) titulo = est.sel === g.correta ? 'Você acertou.' : (est.sel ? 'A resposta certa é a letra ' + g.correta + '.' : 'Sem resposta. A certa é a letra ' + g.correta + '.');
+  else if (est.primeira) titulo = 'Certa de primeira.';
+  else if (est.tentativas[est.tentativas.length - 1] === g.correta) titulo = 'Certa na segunda tentativa.';
+  else titulo = 'A resposta certa é a letra ' + g.correta + '.';
+  const ok = est.revisao ? est.sel === g.correta : est.tentativas[est.tentativas.length - 1] === g.correta;
+  let h = '<div class="explica ' + (ok ? 'ok' : 'nao') + '">';
+  h += '<p class="explica-tit">' + esc(titulo) + ' ' + fita(g.paginas) + '</p>';
+  if (g.explicacao) h += '<p>' + esc(g.explicacao) + '</p>';
+  const erradas = (est.tentativas || []).filter(l => l !== g.correta && g.erradas && g.erradas[l]);
+  for (const l of erradas) h += '<p class="explica-errada"><strong>Por que a ' + esc(l) + ' está errada:</strong> ' + esc(g.erradas[l]) + '</p>';
+  h += '</div>';
+  return h;
+}
+
+/* ---------- telas ---------- */
+function viewUpload(){
+  const u = S.up;
+  let h = '<section class="entrada">';
+  h += '<h1>Coloque sua matéria aqui</h1>';
+  h += '<p class="lead">Envie o PDF do livro da disciplina. O Marca-texto separa os temas, encontra as autoatividades e mostra em que página do livro procurar cada resposta.</p>';
+  if (u && u.fase === 'lendo'){
+    h += '<div class="folha leitura" aria-live="polite"><p id="txt-leitura">Abrindo o PDF</p><div class="barra"><span id="barra-leitura" style="width:3%"></span></div><p class="nota">Livros grandes levam alguns segundos.</p></div>';
+  } else {
+    if (u && u.fase === 'erro') h += '<p class="aviso erro" role="alert">' + esc(u.msg) + '</p>';
+    h += '<label class="soltar"><input type="file" accept="application/pdf,.pdf" id="arquivo"><span class="soltar-tit">Escolher PDF</span><span class="soltar-sub">O arquivo é lido aqui mesmo e fica salvo só neste navegador.</span></label>';
+    h += '<ol class="como"><li><b>Veja o que vai cair.</b> As autoatividades de cada tema aparecem antes da leitura.</li><li><b>Leia o livro caçando as respostas.</b> Cada ponto importante vem com a página onde está.</li><li><b>Responda e confira.</b> Errou? Volte à página indicada e tente de novo.</li><li><b>Faça simulados</b> no estilo da prova, por avaliação.</li></ol>';
+  }
+  return h + '</section>';
+}
+
+function viewHoje(){
+  if (!S.material) return viewUpload();
+  const prova = parseD(S.config.dataProva), hoje = parseD(hojeISO());
+  const falta = diffDays(hoje, prova);
+  const titulo = falta > 1 ? 'Faltam ' + falta + ' dias para a prova' : falta === 1 ? 'A prova é amanhã' : falta === 0 ? 'A prova é hoje' : 'A data da prova já passou';
+  let h = '<section class="abre"><h1>' + titulo + '</h1><p class="abre-sub">' + esc(fmtLongo(prova)) + '. <a href="#ajustes">Mudar data</a>' + ' ' + syncIndicador() + '</p></section>';
+
+  const pl = plano(), fimEstudo = addDays(prova, -2);
+  h += '<section class="folha hoje">';
+  if (falta < 0){
+    h += '<h2 class="rot">Hoje</h2><p>Atualize a data da prova em <a href="#ajustes">Ajustes</a> para refazer o plano.</p>';
+  } else if (hoje > fimEstudo){
+    const final = avaliacoes().find(a => a.id === 'av4');
+    h += '<h2 class="rot">Hoje</h2><p class="hoje-tit">Dia de revisão</p><p>Faça o simulado da ' + esc(final.nome) + ' e releia as páginas das questões que errar.</p><a class="btn" href="#simulados">Ir para os simulados</a>';
+  } else {
+    let alvo;
+    if (hoje < pl[0].ini) alvo = tema(pl[0].n);
+    else {
+      const doDia = pl.filter(x => hoje >= x.ini && hoje <= x.fim).map(x => tema(x.n));
+      alvo = doDia.find(t => !concluido(t)) || doDia[0] || tema(pl[pl.length - 1].n);
+    }
+    const ets = etapas(alvo), feitas = ets.filter(e => e.feito).length;
+    h += '<h2 class="rot">Hoje, Tema ' + alvo.n + '</h2><p class="hoje-tit">' + esc(alvo.titulo) + '</p>';
+    h += '<p class="hoje-meta">Páginas ' + alvo.pIni + ' a ' + alvo.pFim + ' ' + segmentos(alvo) + '</p>';
+    h += '<a class="btn" href="#tema-' + alvo.n + '">' + (feitas === 0 ? 'Começar o tema' : feitas === ets.length ? 'Revisar o tema' : 'Continuar o tema') + '</a>';
+  }
+  h += '</section>';
+
+  const atras = pl.filter(x => x.fim < hoje && !concluido(tema(x.n)));
+  if (atras.length && falta >= 0){
+    h += '<section class="atraso"><p><strong>Ficou para trás:</strong> ' + atras.map(x => '<a href="#tema-' + x.n + '">Tema ' + x.n + '</a>').join(', ') + '. Recupere quando der, sem pular a leitura.</p></section>';
+  }
+
+  h += '<section><h2 class="sec">Suas avaliações</h2><ul class="avs">';
+  for (const av of avaliacoes()){
+    const prontos = av.temas.filter(n => concluido(tema(n))).length;
+    const r = S.prog.simulados[av.id];
+    h += '<li class="av"><a href="#simulados"><span class="av-nome">' + esc(av.nome) + '</span><span class="av-desc">' + esc(av.desc) + (av.temas.length && av.id !== 'av4' ? ', ' + intervaloTemas(av.temas).toLowerCase() : '') + '</span>';
+    if (av.sim) h += '<span class="av-st">' + prontos + ' de ' + av.temas.length + ' temas estudados' + (r ? '. Último simulado: ' + r.acertos + ' de ' + r.total : '') + '</span>';
+    h += '</a></li>';
+  }
+  h += '</ul></section>';
+
+  h += '<section><details class="plano"><summary>Ver o plano até a prova</summary><ul class="plano-l">';
+  for (const x of pl){
+    const t = tema(x.n), dt = fmtFaixa(x.ini, x.fim);
+    h += '<li class="' + (concluido(t) ? 'feito' : '') + '"><span class="plano-d">' + esc(dt) + '</span><a href="#tema-' + t.n + '">Tema ' + t.n + ': ' + esc(t.titulo) + '</a>' + (concluido(t) ? '<span class="plano-ok" aria-label="concluído">' + ICON.check + '</span>' : '') + '</li>';
+  }
+  const rev1 = addDays(prova, -1);
+  h += '<li><span class="plano-d">' + esc(fmtFaixa(rev1, prova)) + '</span><span>Revisão e simulado final</span></li>';
+  h += '</ul></details></section>';
+  return h;
+}
+
+function viewTemas(){
+  if (!S.material) return viewUpload();
+  let h = '<h1 class="tit-pag">Temas</h1>';
+  if (!S.material.formatoLivro) h += '<p class="nota">Este material não segue o formato do livro da Uniasselvi, então foi dividido em partes de 15 páginas.</p>';
+  for (const u of S.material.unidades){
+    if (S.material.formatoLivro) h += '<h2 class="sec">Unidade ' + u + '</h2>';
+    h += '<ul class="temas">';
+    for (const t of S.material.temas.filter(x => x.unidade === u)){
+      const ets = etapas(t), feitas = ets.filter(e => e.feito).length;
+      let st = feitas === 0 ? 'Não começou' : concluido(t) ? (t.questoes.length ? 'Concluído. Acertou ' + acertosPrimeira(t) + ' de ' + t.questoes.length + ' de primeira' : 'Leitura concluída') : 'Etapa ' + Math.min(feitas + 1, ets.length) + ' de ' + ets.length;
+      h += '<li><a href="#tema-' + t.n + '" class="tema-l' + (concluido(t) ? ' feito' : '') + '"><span class="tema-n">' + t.n + '</span><span class="tema-c"><span class="tema-t">' + esc(t.titulo) + '</span><span class="tema-m">Páginas ' + t.pIni + ' a ' + t.pFim + '</span><span class="tema-s">' + esc(st) + ' ' + segmentos(t) + '</span></span></a></li>';
+    }
+    h += '</ul>';
+  }
+  return h;
+}
+
+function viewTema(n){
+  if (!S.material) return viewUpload();
+  const t = tema(n); if (!t) return '<p>Tema não encontrado. <a href="#temas">Ver temas</a></p>';
+  const p = pt(n), ets = etapas(t), atualI = ets.findIndex(e => !e.feito);
+  let h = '<a class="voltar" href="#temas">' + ICON.voltar + 'Temas</a>';
+  h += '<header class="tema-cab"><p class="tema-rot">Tema ' + t.n + (S.material.formatoLivro ? ', Unidade ' + t.unidade : '') + '</p><h1>' + esc(t.titulo) + '</h1>';
+  h += '<p class="tema-info">Páginas ' + t.pIni + ' a ' + t.pFim + ' do livro. ' + esc(caiEm(t)) + '</p></header>';
+  if (t.metas.length) h += '<details class="metas"><summary>O que o livro quer que você aprenda</summary><ul>' + t.metas.map(m => '<li>' + esc(m) + '</li>').join('') + '</ul></details>';
+
+  h += '<ol class="etapas">';
+  ets.forEach((e, i) => {
+    const k = n + ':' + e.id;
+    const aberto = S.abertos[k] !== undefined ? S.abertos[k] : i === atualI;
+    h += '<li class="etapa' + (e.feito ? ' feita' : '') + '" id="et-' + e.id + '"><details data-et="' + k + '"' + (aberto ? ' open' : '') + '><summary><span class="etapa-n">' + (e.feito ? ICON.check : (i + 1)) + '</span><span class="etapa-nome">' + esc(e.nome) + '</span></summary><div class="etapa-corpo">';
+    h += corpoEtapa(t, e, p) + '</div></details></li>';
+  });
+  h += '</ol>';
+  return h;
+}
+
+function corpoEtapa(t, e, p){
+  const n = t.n; let h = '';
+  if (e.id === 'perguntas'){
+    h += '<p>Estas são as autoatividades do fim do tema (páginas ' + t.pQuestoes.join(' e ') + '). Leia só para saber o que procurar. Não responda ainda.</p>';
+    t.questoes.forEach(q => { h += qCard(q, { modo:'leitura', rotulo:'Pergunta ' + q.numero, key:n + '|' + q.id }); });
+    if (!p.leuPerguntas) h += '<button type="button" class="btn" data-act="etapa" data-n="' + n + '" data-e="perguntas">Li as perguntas</button>';
+  }
+  if (e.id === 'leitura'){
+    h += '<p>Abra o livro na <strong>página ' + t.pIni + '</strong> e leia até a <strong>página ' + t.pFim + '</strong>. Leia caçando a resposta destes pontos:</p>';
+    const pistas = pistasDe(n);
+    if (pistas.length){
+      h += '<ul class="pistas">';
+      pistas.forEach((x, i) => {
+        const achou = (p.achadas || []).includes(i);
+        h += '<li class="pista' + (achou ? ' achada' : '') + '"><div class="pista-cab"><span class="marca">' + esc(x.conceito) + '</span>' + fita(x.pagina ? [x.pagina] : []) + '</div><p class="pista-q">' + esc(x.pergunta) + '</p>';
+        if (achou) h += '<div class="pista-r"><p><strong>No livro:</strong> ' + esc(x.resposta) + '</p>' + (x.pegadinha ? '<p class="pegadinha"><strong>Pegadinha:</strong> ' + esc(x.pegadinha) + '</p>' : '') + '</div>';
+        else h += '<button type="button" class="btn-sec" data-act="achei" data-n="' + n + '" data-i="' + i + '">Achei no livro, conferir</button>';
+        h += '</li>';
+      });
+      h += '</ul>';
+    } else if (S.busy['a' + n]){
+      h += '<div class="carregando" role="status"><span class="pulso" aria-hidden="true"></span><span>Lendo o tema com o Claude. Leva até um minuto.</span><button type="button" class="link" data-act="parar" data-b="a' + n + '">Parar</button></div>';
+    } else if (S.ia){
+      if (S.erros['pistas' + n]) h += '<p class="aviso erro" role="alert">' + esc(S.erros['pistas' + n]) + '</p>';
+      h += '<button type="button" class="btn-sec" data-act="pistas" data-n="' + n + '">Mostrar o que procurar</button><p class="nota">O Claude lê o tema e marca os pontos que mais caem, com a página de cada um.</p>';
+    } else if (!S.iaPronto){
+      h += '<p class="nota">Conectando ao Claude…</p>';
+    }
+    if (!pistas.length && t.questoes.length){
+      h += '<div class="provaveis"><p class="nota">Páginas que mais falam de cada pergunta:</p><ul>' + t.questoes.map(q => '<li>Pergunta ' + q.numero + ': ' + (paginasProvaveis(S.material.pages, t, q).map(pg => fita([pg])).join(' ') || 'leia o tema inteiro') + '</li>').join('') + '</ul></div>';
+    }
+    if (!p.leuTema) h += '<button type="button" class="btn" data-act="etapa" data-n="' + n + '" data-e="leitura">Terminei a leitura</button>';
+  }
+  if (e.id === 'responder'){
+    h += '<p>Agora responda sem olhar o livro. Se errar, o Marca-texto mostra a página para reler antes da segunda tentativa.</p>';
+    t.questoes.forEach(q => {
+      const key = n + '|' + q.id;
+      h += qCard(q, { modo:'pratica', rotulo:'Pergunta ' + q.numero, key, sel:S.sel[key], estado:p.respostas[q.id], gab:gabDe(q, n) });
+    });
+    if (concluido(t)) h += '<p class="resumo-acertos">Você acertou <strong>' + acertosPrimeira(t) + ' de ' + t.questoes.length + '</strong> de primeira.' + (acertosPrimeira(t) < t.questoes.length ? ' Releia as páginas indicadas nas que errou.' : '') + '</p>';
+  }
+  if (e.id === 'treino'){
+    const todas = treinoDe(n);
+    const visiveis = (S.treino[n] || []).length ? todas.length : Math.min(todas.length, p.mostrar || 3);
+    const qs = todas.slice(0, visiveis);
+    h += '<p>Questões novas no formato da prova: contexto, comando e alternativas com pegadinhas. Todas vêm do conteúdo deste tema.</p>';
+    qs.forEach((q, i) => {
+      const key = n + '|' + q.id;
+      h += qCard(q, { modo:'pratica', rotulo:'Treino ' + (i + 1), key, sel:S.sel[key], estado:p.respostas[q.id], gab:q.gab });
+    });
+    if (S.erros['treino' + n]) h += '<p class="aviso erro" role="alert">' + esc(S.erros['treino' + n]) + '</p>';
+    if (S.busy['t' + n]) h += '<div class="carregando" role="status"><span class="pulso" aria-hidden="true"></span><span>Criando questões. Leva até um minuto.</span><button type="button" class="link" data-act="parar" data-b="t' + n + '">Parar</button></div>';
+    else if (visiveis < todas.length) h += '<button type="button" class="btn-sec" data-act="mais-treino" data-n="' + n + '">Mostrar mais questões</button>';
+    else if (S.ia) h += '<button type="button" class="btn-sec" data-act="treino" data-n="' + n + '">' + (qs.length ? 'Criar mais 5 questões com o Claude' : 'Criar 5 questões com o Claude') + '</button>';
+    else if (S.iaPronto && !qs.length) h += '<p class="nota">' + esc(msgErro({ code:'sem_ia' })) + '</p>';
+    else if (qs.length) h += '<p class="nota">Você já viu todas as questões de treino deste tema. Os simulados misturam estas questões com as autoatividades.</p>';
+  }
+  return h;
+}
+
+function viewSimulados(){
+  if (!S.material) return viewUpload();
+  let h = '<h1 class="tit-pag">Simulados</h1><p class="lead">10 questões por vez, sem correção até entregar, como na prova.</p>';
+  if (S.sim && (S.sim.fase === 'prova' || S.sim.fase === 'preparando')) h += '<p class="aviso dica">Você tem um simulado em andamento. <a href="#simulado">Continuar</a></p>';
+  h += '<ul class="sims">';
+  for (const av of avaliacoes()){
+    const r = S.prog.simulados[av.id];
+    h += '<li class="folha sim-c"><h2>' + esc(av.nome) + '</h2><p class="sim-desc">' + esc(av.desc) + (av.temas.length && av.id !== 'av4' ? ' (' + intervaloTemas(av.temas) + ')' : '') + '.</p>';
+    if (av.sim){
+      if (r) h += '<p class="sim-r">Último resultado: <strong>' + r.acertos + ' de ' + r.total + '</strong> em ' + esc(fmtCurto(parseD(r.data))) + '</p>';
+      h += '<button type="button" class="btn" data-act="sim-iniciar" data-id="' + av.id + '"' + (S.sim && S.sim.fase === 'preparando' ? ' disabled' : '') + '>Fazer simulado</button>';
+    } else {
+      h += '<p class="nota">Aqui não tem simulado: é um trabalho. Os temas estudados dão a base para preenchê-lo.</p>';
+    }
+    h += '</li>';
+  }
+  h += '</ul>';
+  if (S.iaPronto && !S.ia && !S.emb) h += '<p class="nota">' + esc(msgErro({ code:'sem_ia' })) + '</p>';
+  return h;
+}
+
+function viewSimulado(){
+  const s = S.sim;
+  if (!s) return '<a class="voltar" href="#simulados">' + ICON.voltar + 'Simulados</a><p>Nenhum simulado em andamento.</p>';
+  const av = avaliacoes().find(a => a.id === s.id) || { nome:'Simulado' };
+  let h = '<a class="voltar" href="#simulados">' + ICON.voltar + 'Simulados</a>';
+  if (s.fase === 'preparando'){
+    h += '<h1 class="tit-pag">' + esc(av.nome) + '</h1><div class="folha carregando-g" role="status"><span class="pulso" aria-hidden="true"></span><p>' + esc(s.msg || 'Preparando') + '</p><div class="barra"><span style="width:' + Math.round(100 * (s.passo - 1) / Math.max(1, s.total)) + '%"></span></div><p class="nota">Na primeira vez o Claude cria as questões de cada tema. Depois fica mais rápido.</p><button type="button" class="link" data-act="sim-parar">Parar</button></div>';
+    return h;
+  }
+  if (s.fase === 'erro'){
+    return h + '<h1 class="tit-pag">' + esc(av.nome) + '</h1><p class="aviso erro" role="alert">' + esc(s.msg) + '</p><button type="button" class="btn" data-act="sim-iniciar" data-id="' + s.id + '">Tentar de novo</button>';
+  }
+  if (s.fase === 'prova'){
+    const x = s.qs[s.i], respondidas = Object.keys(s.resp).length;
+    h += '<div class="sim-cab"><h1 class="tit-pag">' + esc(av.nome) + '</h1><p class="sim-pos">Questão ' + (s.i + 1) + ' de ' + s.qs.length + '</p>';
+    h += '<div class="pontos" role="list">' + s.qs.map((_, i) => '<button type="button" role="listitem" class="ponto' + (s.resp[i] ? ' on' : '') + (i === s.i ? ' agora' : '') + '" data-act="sim-ir" data-i="' + i + '" aria-label="Questão ' + (i + 1) + (s.resp[i] ? ', respondida' : '') + '"></button>').join('') + '</div></div>';
+    h += qCard(x.q, { modo:'prova', key:'sim', sel:s.resp[s.i], rotulo:'Tema ' + x.n + ': ' + tema(x.n).titulo });
+    h += '<div class="sim-nav">';
+    h += '<button type="button" class="btn-sec" data-act="sim-ant"' + (s.i === 0 ? ' disabled' : '') + '>Anterior</button>';
+    if (s.i < s.qs.length - 1) h += '<button type="button" class="btn" data-act="sim-prox">Próxima</button>';
+    else h += '<button type="button" class="btn" data-act="sim-entregar">Entregar simulado</button>';
+    h += '</div>';
+    if (s.i === s.qs.length - 1 && respondidas < s.qs.length) h += '<p class="nota">' + (s.qs.length - respondidas) + ' sem resposta. Você pode voltar pelos quadradinhos acima.</p>';
+    return h;
+  }
+  // resultado
+  const errados = s.qs.filter(x => !x.ok);
+  const temasRev = [...new Set(errados.map(x => x.n))];
+  h += '<section class="abre"><h1>Você acertou ' + s.acertos + ' de ' + s.qs.length + '</h1><p class="abre-sub">' + (s.acertos >= 7 ? 'Bom resultado. Revise as erradas para fechar as lacunas.' : 'Revise as erradas: cada uma mostra a página do livro para reler.') + '</p></section>';
+  if (temasRev.length) h += '<p class="revisar">Temas para revisar: ' + temasRev.map(n => '<a href="#tema-' + n + '">Tema ' + n + '</a>').join(', ') + '</p>';
+  h += '<ol class="rev">';
+  s.qs.forEach((x, i) => {
+    h += '<li><details' + (x.ok ? '' : ' open') + '><summary><span class="rev-st ' + (x.ok ? 'ok' : 'nao') + '">' + (x.ok ? 'Certa' : 'Errada') + '</span> Questão ' + (i + 1) + ', Tema ' + x.n + '</summary>' + qCard(x.q, { modo:'revisao', key:'rev' + i, sel:s.resp[i], gab:gabDe(x.q, x.n) }) + '</details></li>';
+  });
+  h += '</ol><div class="sim-nav"><button type="button" class="btn" data-act="sim-iniciar" data-id="' + s.id + '">Fazer outro simulado</button></div>';
+  return h;
+}
+
+function viewAjustes(){
+  let h = '<a class="voltar" href="#hoje">' + ICON.voltar + 'Hoje</a><h1 class="tit-pag">Ajustes</h1>';
+  h += '<section class="folha ajs"><h2>Sincronizar celular e PC</h2><div id="sync-box">' + syncCorpo() + '</div></section>';
+  h += '<section class="folha ajs"><label for="data-prova">Data da prova</label><input type="date" id="data-prova" value="' + esc(S.config.dataProva) + '" data-ch="data-prova">';
+  if (S.material) h += '<label for="data-inicio">Início do plano de estudo</label><input type="date" id="data-inicio" value="' + esc(S.config.inicio) + '" data-ch="data-inicio"><p class="nota">Os temas são distribuídos entre o início do plano e dois dias antes da prova. Os dois últimos dias ficam para revisão.</p>';
+  h += '</section>';
+  if (S.material){
+    const m = S.material;
+    h += '<section class="folha ajs"><h2>Material</h2><p>' + esc(m.nome) + '</p><p class="nota">' + m.totalPaginas + ' páginas, ' + m.temas.length + ' temas' + (m.formatoLivro ? ', ' + m.temas.reduce((a, t) => a + t.questoes.length, 0) + ' autoatividades' : '') + '.</p>';
+    if (S.confirmar === 'trocar') h += '<p class="aviso erro">Trocar o material apaga o progresso e as questões criadas para este. Confirma?</p><div class="linha"><button type="button" class="btn perigo" data-act="trocar-sim">Sim, trocar</button><button type="button" class="btn-sec" data-act="cancelar">Cancelar</button></div>';
+    else h += '<button type="button" class="btn-sec" data-act="trocar">Trocar material</button>';
+    h += '</section>';
+    h += '<section class="folha ajs"><h2>Apagar tudo</h2><p class="nota">Remove o material, o progresso e as questões salvas neste navegador.</p>';
+    if (S.confirmar === 'apagar') h += '<div class="linha"><button type="button" class="btn perigo" data-act="apagar-sim">Apagar tudo</button><button type="button" class="btn-sec" data-act="cancelar">Cancelar</button></div>';
+    else h += '<button type="button" class="btn-sec" data-act="apagar">Apagar dados</button>';
+    h += '</section>';
+  }
+  if (S.emb) h += '<section class="folha ajs"><h2>Conteúdo do livro</h2><p>Seu livro foi reconhecido. As pistas, o gabarito comentado das autoatividades e as questões de treino já vêm prontos e funcionam sem internet depois de carregados.' + (S.ia ? ' O Claude está conectado e pode criar questões extras.' : '') + '</p></section>';
+  else h += '<section class="folha ajs"><h2>Claude</h2><p>' + (!S.iaPronto ? 'Conectando…' : S.ia ? 'Conectado. As pistas, correções e questões usam a sua conta do Claude.' : 'Indisponível nesta página. O gabarito do próprio livro funciona mesmo assim, quando ele estiver no PDF.') + '</p></section>';
+  h += '<section class="folha ajs"><h2>Usar como app no Android</h2><p>No Chrome, abra o menu de três pontos e toque em <strong>Instalar app</strong> ou <strong>Adicionar à tela inicial</strong>. O Marca-texto ganha um ícone como qualquer app.</p></section>';
+  return h;
+}
+
+/* ---------- render + rotas ---------- */
+function rota(){ return (location.hash || '#hoje').slice(1) || 'hoje'; }
+function render(){
+  if (!S.config) return;
+  const r = rota(); let html, aba = 'hoje';
+  if (r === 'temas'){ html = viewTemas(); aba = 'temas'; }
+  else if (/^tema-\d+$/.test(r)){ html = viewTema(+r.split('-')[1]); aba = 'temas'; }
+  else if (r === 'simulados'){ html = viewSimulados(); aba = 'sim'; }
+  else if (r === 'simulado'){ html = viewSimulado(); aba = 'sim'; }
+  else if (r === 'ajustes'){ html = viewAjustes(); aba = ''; }
+  else html = viewHoje();
+  $('#main').innerHTML = html;
+  document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.aba === aba) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  if (S.up && S.up.fase === 'lendo') progressoLeitura();
+}
+
+const ACOES = {
+  etapa: b => marcarEtapa(+b.dataset.n, b.dataset.e),
+  pistas: b => pedirPistas(+b.dataset.n),
+  achei: b => { const p = pt(+b.dataset.n); p.achadas = [...new Set([...(p.achadas || []), +b.dataset.i])]; salvarProg(); render(); },
+  escolher: b => { S.sel[b.dataset.k] = b.dataset.l; delete S.erros[b.dataset.k]; render(); },
+  conferir: b => conferir(b.dataset.k),
+  treino: b => pedirTreino(+b.dataset.n),
+  'mais-treino': b => { const p = pt(+b.dataset.n); p.mostrar = (p.mostrar || 3) + 3; salvarProg(); render(); },
+  parar: b => { const c = S.busy[b.dataset.b]; if (c && c.abort) c.abort(); },
+  'sim-iniciar': b => iniciarSimulado(b.dataset.id),
+  'sim-parar': () => { if (S.sim && S.sim.ctl) S.sim.ctl.abort(); },
+  'sim-escolher': b => { S.sim.resp[S.sim.i] = b.dataset.l; render(); },
+  'sim-prox': () => { S.sim.i = Math.min(S.sim.qs.length - 1, S.sim.i + 1); render(); window.scrollTo(0, 0); },
+  'sim-ant': () => { S.sim.i = Math.max(0, S.sim.i - 1); render(); window.scrollTo(0, 0); },
+  'sim-ir': b => { S.sim.i = +b.dataset.i; render(); },
+  'sim-entregar': () => entregar(),
+  'sync-conectar': () => {
+    const v = (document.getElementById('sync-token') || {}).value || '';
+    const tok = v.trim();
+    if (!tok){ SY.erro = 'Cole o token do GitHub antes de conectar.'; atualizarSyncUI(); return; }
+    SY.token = tok; SY.gist = ''; SY.erro = ''; lsSet('mt-token', tok); lsSet('mt-gist', '');
+    atualizarSyncUI(); sincronizar();
+  },
+  'sync-agora': () => sincronizar(),
+  'sync-sair': () => { SY.token = ''; SY.gist = ''; SY.erro = ''; SY.ultima = ''; lsSet('mt-token', ''); lsSet('mt-gist', ''); lsSet('mt-ultima', ''); atualizarSyncUI(); },
+  trocar: () => { S.confirmar = 'trocar'; render(); },
+  apagar: () => { S.confirmar = 'apagar'; render(); },
+  cancelar: () => { S.confirmar = null; render(); },
+  'trocar-sim': async () => { S.confirmar = null; S.material = null; S.emb = null; S.up = null; await idb.set('material', null); location.hash = '#hoje'; render(); },
+  'apagar-sim': async () => {
+    S.confirmar = null; await idb.clear();
+    S.material = null; S.emb = null; S.analise = {}; S.treino = {}; S.sel = {}; S.sim = null; S.up = null;
+    S.prog = { temas:{}, simulados:{}, usadas:[] };
+    S.config = { dataProva:'2026-11-24', inicio:hojeISO() };
+    await idb.set('config', S.config);
+    location.hash = '#hoje'; render();
+  }
+};
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
+  const f = ACOES[b.dataset.act]; if (f){ e.preventDefault(); f(b); }
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.id === 'arquivo' && el.files && el.files[0]) lerPdf(el.files[0]);
+  if (el.dataset && el.dataset.ch === 'data-prova' && el.value){ S.config.dataProva = el.value; S.config.atualizado = Date.now(); idb.set('config', S.config); agendarSync(500); }
+  if (el.dataset && el.dataset.ch === 'data-inicio' && el.value){ S.config.inicio = el.value; S.config.atualizado = Date.now(); idb.set('config', S.config); agendarSync(500); }
+});
+document.addEventListener('toggle', e => { const d = e.target; if (d && d.dataset && d.dataset.et) S.abertos[d.dataset.et] = d.open; }, true);
+window.addEventListener('hashchange', () => { S.confirmar = null; render(); window.scrollTo(0, 0); });
+
+async function iniciar(){
+  try {
+    S.config = await idb.get('config') || { dataProva:'2026-11-24', inicio:hojeISO() };
+    S.material = await idb.get('material') || null;
+    S.prog = await idb.get('progresso') || { temas:{}, simulados:{}, usadas:[] };
+    S.prog.temas = S.prog.temas || {}; S.prog.simulados = S.prog.simulados || {}; S.prog.usadas = S.prog.usadas || [];
+    if (S.material) for (const t of S.material.temas){
+      const a = await idb.get('ia:analise:' + t.n); if (a) S.analise[t.n] = a;
+      const tr = await idb.get('ia:treino:' + t.n); if (tr) S.treino[t.n] = tr;
+    }
+    aplicarDados();
+  } catch (e) {
+    S.config = S.config || { dataProva:'2026-11-24', inicio:hojeISO() };
+    S.prog = S.prog || { temas:{}, simulados:{}, usadas:[] };
+  }
+  render();
+  iniciarIA();
+  if (SY.token) sincronizar();
+}
+iniciar();
+document.addEventListener('visibilitychange', () => { if (!SY.token) return; if (document.visibilityState === 'visible') sincronizar(); else { clearTimeout(SY.t); sincronizar(); } });
+window.addEventListener('online', () => { if (SY.token) sincronizar(); });
+
+/* PWA: só quando hospedado fora do Claude (ex.: GitHub Pages) */
+(function(){
+  try {
+    const h = location.hostname;
+    if (location.protocol !== 'https:' || /claude\.ai$|claude\.site$|claudeusercontent|anthropic/.test(h)) return;
+    const l = document.createElement('link'); l.rel = 'manifest'; l.href = 'manifest.json'; document.head.appendChild(l);
+    const i = document.createElement('link'); i.rel = 'apple-touch-icon'; i.href = 'icon-192.png'; document.head.appendChild(i);
+    if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  } catch (e) {}
+})();
+
+</script>
+</body>
+</html>
